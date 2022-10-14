@@ -21,6 +21,11 @@ $ pip3 install virtualenv
 $ virtualenv env
 $ source env/bin/activate
 ```
+**If you want to exit the virtual environment, enter:**
+```sh
+(env)$ deactivate
+```
+
  Now install the project dependencies:
  ```sh
  (env)$ pip3 install -r requirements.txt
