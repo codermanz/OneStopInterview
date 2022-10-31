@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import InterviewButtonContent from "./InterviewButtonContent";
 
-function BehavioralInterviewComponent() {
+function TechnicalInterviewComponent() {
   // Theme for rounded corners to make the button resemble a pill
   const pillTheme = createTheme({
     shape: {
@@ -16,8 +16,8 @@ function BehavioralInterviewComponent() {
   });
 
   /*
-    BehavioralInterviewComponent will return:
-    - Behavioral interview topics
+    TechnicalInterviewComponent will return:
+    - Technical interview topics
     - Pill-shaped buttons that opens an external website when clicked
   */
   return (
@@ -77,4 +77,4 @@ function BehavioralInterviewComponent() {
   );
 }
 
-export default BehavioralInterviewComponent;
+export default TechnicalInterviewComponent;
