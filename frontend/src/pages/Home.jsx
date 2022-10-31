@@ -1,12 +1,12 @@
 import React from "react";
+import { Footer } from "../components/index";
 
 function Home() {
    return (
-      <>
-         <div>
-            <span>Home View</span>
-         </div>
-      </>
+      <div className="h-screen text-white overflow-hidden">
+         <span>Home View</span>
+         <Footer />
+      </div>
    );
 }
 
