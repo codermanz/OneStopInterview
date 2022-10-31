@@ -1,10 +1,9 @@
 import React from "react";
-import { Footer, Navbar } from "../components/index";
+import { Footer } from "../components/index";
 
 function Home() {
    return (
-      <div className="bg-dark-bg h-screen text-white overflow-hidden">
-         <Navbar />
+      <div className="h-screen text-white overflow-hidden">
          <span>Home View</span>
          <Footer />
       </div>
