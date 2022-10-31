@@ -37,7 +37,6 @@ function InterviewPage() {
       className="bg-dark-bg h-screen text-white overflow-hidden"
       style={{ overflow: "auto" }}
     >
-      <Navbar />
       <div style={{ padding: "60px", margin: "auto", width: "80%" }}>
         <Typography variant="h2" align="center" gutterBottom>
           Technical and Behavioral Interview Questions
