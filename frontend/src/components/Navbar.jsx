@@ -31,7 +31,7 @@ function Navbar() {
                      </li>
                   </ul>
                   <div className="ml-24 hover:text-theme-blue hover:cursor-pointer">
-                     <a href="../">Login/Signup</a>
+                     <a href="/login/">Login/Signup</a>
                   </div>
                </div>
             </div>
