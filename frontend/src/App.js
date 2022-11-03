@@ -2,9 +2,12 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Home, InterviewPage, Login, ResumeTips, Roadmap } from "./pages";
 import { Navbar } from "./components";
+import CssBaseline from '@mui/material/CssBaseline'
+
 function App() {
    return (
       <>
+      <CssBaseline />
          <Router>
             <div className="bg-dark-bg">
                <Navbar />
