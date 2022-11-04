@@ -1,42 +1,103 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import logo from '../assets/logo.svg'
+import React from "react";
+import { Link } from "react-router-dom";
+import logo from "../assets/logo.svg";
+import { Box, Typography, Button } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Avatar from "@mui/material/Avatar";
+const theme = createTheme({
+  typography: {
+    button: {
+      textTransform: "none",
+      fontSize: "18px",
+    },
+  },
+});
+
 function Navbar() {
   return (
-    <div
-      className='text-white sticky flex-none top-0 m-0 h-14 border-b border-slate-300/10 
-            backdrop-blur-sm shadow-lg'>
-      <div className='max-w-8xl mx-auto'>
-        <div className='py-4 mx-16'>
-          <div className='relative flex items-center'>
-            <a href='../' className='mr-48 flex'>
-              <span> ONE STOP INTERVIEW </span>
-            </a>
-            <ul className='flex space-x-16'>
-              <li className='hover:text-theme-blue hover:cursor-pointer'>
-                <Link to='/interview'>Interview Prep</Link>
-              </li>
-              <li className='hover:text-theme-blue hover:cursor-pointer'>
-                <Link to='/resume-tips'>Resume</Link>
-              </li>
-              <li className='hover:text-theme-blue hover:cursor-pointer'>
-                Jobs
-              </li>
-              <li className='hover:text-theme-blue hover:cursor-pointer'>
-                Forums
-              </li>
-              <li className='hover:text-theme-blue hover:cursor-pointer'>
-                <Link to='/roadmap'>Roadmap</Link>
-              </li>
-            </ul>
-            <div className='ml-24 hover:text-theme-blue hover:cursor-pointer'>
-              <a href='/login/'>Login/Signup</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+    <>
+      <ThemeProvider theme={theme}>
+        <Box
+          sx={{
+            color: "white",
+            top: "0px",
+            position: "sticky",
+            height: "74px",
+            borderBottomWidth: "1px",
+            borderColor: "rgb(203 213 225 / 0.1)",
+            backdropFilter: "blur(4px)",
+            display: "flex",
+            alignItems: "center",
+          }}>
+          <Box px={6}>
+            <Link
+              to="/"
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}>
+              <img
+                src={logo}
+                alt="Logo"
+                style={{ height: "74px", width: "auto" }}
+              />
+              <Typography variant="h4" pl={6} sx={{ fontWeight: "bold" }}>
+                One Stop Interview
+              </Typography>
+            </Link>
+          </Box>
+          <Box
+            px={6}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "12px",
+            }}>
+            <Box>
+              <Link to="/interview">
+                <Button type="text">Interview Prep</Button>
+              </Link>
+            </Box>
+            <Box>
+              <Link to="/resume-tips">
+                <Button type="text">Resume</Button>
+              </Link>
+            </Box>
+            <Box>
+              <Button type="text">Jobs</Button>
+            </Box>
+            <Box>
+              <Button type="text">Forums</Button>
+            </Box>
+            <Box>
+              <Link to="/roadmap">
+                <Button type="text">Roadmap</Button>
+              </Link>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              flexGrow: "1",
+            }}
+            mr={5}>
+            <Link to="/login">
+              <Typography sx={{ fontSize: "18px" }} pr={4}>
+                Login/Signup
+              </Typography>
+            </Link>
+            <Avatar />
+          </Box>
+        </Box>
+      </ThemeProvider>
+    </>
+  );
 }
 
-export default Navbar
+export default Navbar;
