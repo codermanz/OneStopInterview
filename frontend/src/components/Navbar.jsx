@@ -26,7 +26,7 @@ function Navbar() {
             height: "74px",
             borderBottomWidth: "1px",
             borderColor: "rgb(203 213 225 / 0.1)",
-            backdropFilter: "blur(4px)",
+            backdropFilter: "blur(20px)",
             display: "flex",
             alignItems: "center",
           }}>
