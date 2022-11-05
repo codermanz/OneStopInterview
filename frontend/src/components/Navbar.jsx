@@ -22,6 +22,7 @@ function Navbar() {
             color: "white",
             top: "0px",
             position: "sticky",
+            zIndex: 999,
             height: "74px",
             borderBottomWidth: "1px",
             borderColor: "rgb(203 213 225 / 0.1)",
