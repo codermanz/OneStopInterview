@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework import generics
+from . import models
+from . import serializers
 
 
 class PostList(generics.ListCreateAPIView):
@@ -10,9 +12,8 @@ class PostList(generics.ListCreateAPIView):
             - /posts
             - /createPost
    """
-    # Create queryset
-    # Serialize
-    pass
+    queryset = models.Post.objects.all()
+    serializer_class = serializers.PostSerializer
 
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -24,7 +25,6 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
         API endpoints that use this view:
             - /posts/{post_id}
             - /deletePost/{post_id}
-            - /admin/deletePost/{post_id}
    """
     # Create queryset
     # Serialize
@@ -54,9 +54,9 @@ class GetQuestions(generics.ListCreateAPIView):
         Gets a list of questions from the question bank
         API endpoints that use this view:
             - /questionsBank
-            - /admin/addQuestion
     """
-    pass
+    queryset = models.TechBehQuestion.objects.all()
+    serializer_class = serializers.TechBehQuestionSerializer
 
 
 class UserProgress(generics.ListCreateAPIView):
@@ -77,20 +77,3 @@ class JobPostings(generics.ListAPIView):
             - /jobPostings
     """
     pass
-
-
-class Category(generics.ListCreateAPIView):
-    """
-        Add categories or get list of all cetegories
-        API endpoints that use this view:
-            - /admin/addCategory
-            - /admin/getCategories
-    """
-    pass
-
-
-def main(request):
-    """
-
-   """
-    return HttpResponse("Hello World")
