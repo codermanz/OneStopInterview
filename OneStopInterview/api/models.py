@@ -10,33 +10,22 @@ class Post(models.Model):
         Post model
     """
 
-    class PostObjects(models.Manager):
-        """
-            Return the Post object and all children posts
-        """
-
-        def get_queryset(self):
-            return super().get_queryset().filter(id='')
-
     title = models.CharField(max_length=250)
     body = models.TextField()
     # Author deletion cascade deletes all of author's posts
     author = models.ForeignKey(settings.AUTH_USER_MODEL,
                                on_delete=models.CASCADE,
                                related_name='forum_posts')
-    # if a post is deleted, all children posts will also be deleted
-    # defines recursive many-to-one relationship
+    # if a post is deleted, only it will be deleted and all other children
+    # posts will remain - also defines recursive many-to-one relationship
     parent_post = models.ForeignKey('self',
                                     on_delete=models.CASCADE,
                                     blank=True,
-                                    null=True,
-                                    related_name='parent_post_id')
+                                    null=True)
     time_stamp = models.DateTimeField(default=timezone.now)
 
     # Default object manager
     objects = models.Manager()
-    # Custom object manager for a particular object
-    post_objects = PostObjects()
 
     def __str__(self):
         return self.title
@@ -59,6 +48,7 @@ class TechBehQuestion(models.Model):
     """
         Technical Behavioural Questions bank model
     """
+
     question_category = models.ForeignKey(QuestionCategory,
                                           on_delete=models.CASCADE)
     question_name = models.CharField(max_length=200)
@@ -67,6 +57,9 @@ class TechBehQuestion(models.Model):
 
     # Default object manager
     objects = models.Manager()
+
+    def __str__(self):
+        return f"Name: {self.question_name}, Category: {self.question_category}"
 
 
 class UserProgress(models.Model):
