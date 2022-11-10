@@ -52,7 +52,7 @@ class PostUserWritePermission(BasePermission):
         return obj.author == request.user
 
 
-class PostDetail(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermission):
+class PostModify(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermission):
     """
         Retrieve a specific post object and all its children posts
         Will only be valid if specified post is a root post.
@@ -66,10 +66,11 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermission)
     serializer_class = serializers.PostSerializer
 
 
-class PostAndChildren(generics.ListAPIView):
+class PostDetail(generics.ListAPIView):
     """
         Post to get a post and all its children posts
     """
+    permission_classes = [AllowAny]
     serializer_class = serializers.PostSerializer
 
     def get_queryset(self):
@@ -79,24 +80,6 @@ class PostAndChildren(generics.ListAPIView):
         """
         posts = self.kwargs.get('pk')  # Get pk from url path
         return models.Post.objects.filter(Q(parent_post_id=posts) | Q(id=posts))
-
-
-class CreateUser(generics.CreateAPIView):
-    """
-        Creates a specified user's object
-        API endpoints that use this view:
-            - /createUser
-    """
-    pass
-
-
-class GetUser(generics.RetrieveAPIView):
-    """
-        Retrieve a user's view
-        API endpoints that use this view:
-            - /getUser/{user_id}
-    """
-    pass
 
 
 class GetQuestions(generics.ListAPIView):
@@ -120,7 +103,7 @@ class GetQuestions(generics.ListAPIView):
                 category = models.QuestionCategory.objects.get(name=self.request.GET.get('category'))
             except models.QuestionCategory.DoesNotExist:
                 raise ValidationError(detail='Category doesn\'t exist')
-            return models.TechBehQuestion.objects.filter(name=category)
+            return models.TechBehQuestion.objects.filter(question_category=category)
         # Return all questions
         return models.TechBehQuestion.objects.all()
 
@@ -159,6 +142,17 @@ class UserProgress(generics.ListCreateAPIView, UserProgressPermissions):
             Return all user progress entries pertaining to the user
         """
         return models.UserProgress.objects.filter(user_id=self.kwargs['pk'])
+
+
+class QuestionCategories(generics.ListAPIView):
+    """
+        Gets all question categories present within the database.
+        API endpoints that use this view:
+            - /questionCategories
+    """
+    permission_classes = [AllowAny]
+    queryset = models.QuestionCategory.objects.all()
+    serializer_class = serializers.QuestionCategorySerializer
 
 
 class JobPostings(generics.ListAPIView):

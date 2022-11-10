@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api.apps.ApiConfig',
     'rest_framework',
+    'users'
 ]
 
 MIDDLEWARE = [
@@ -132,6 +133,8 @@ REST_FRAMEWORK = {
     #     'rest_framework_simplejwt.authentication.JWTAuthentication',
     # )
 }
+
+AUTH_USER_MODEL = 'users.NewUser'
 
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
