@@ -79,8 +79,12 @@ WSGI_APPLICATION = 'OneStopInterview.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'onestopinterview_xt1f',
+        'USER': 'onestopinterview',
+        'PASSWORD': 'SdspQQJLX4E3LhmjWbicgOSwzE3t2pQ7',
+        'HOST': 'dpg-cdfepepgp3juhhv14uug-a.oregon-postgres.render.com',
+        'PORT': '5432',
     }
 }
 
