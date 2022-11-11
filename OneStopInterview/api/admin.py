@@ -6,3 +6,4 @@ from . import models
 admin.site.register(models.QuestionCategory)
 admin.site.register(models.TechBehQuestion)
 admin.site.register(models.Post)
+admin.site.register(models.UserProgress)

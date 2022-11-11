@@ -1,9 +1,11 @@
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import SAFE_METHODS, BasePermission, DjangoModelPermissionsOrAnonReadOnly, AllowAny, DjangoModelPermissions
+from rest_framework.permissions import SAFE_METHODS, BasePermission, IsAuthenticated, AllowAny, \
+    IsAuthenticatedOrReadOnly
 from rest_framework import generics
 from . import models
 from . import serializers
 from django.db.models import Q
+from django.apps import apps
 
 
 class PostList(generics.ListCreateAPIView):
@@ -12,7 +14,7 @@ class PostList(generics.ListCreateAPIView):
         API endpoints that use this view:
             - /posts
    """
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = models.Post.objects.all()
     serializer_class = serializers.PostSerializer
 
@@ -25,11 +27,19 @@ class PostList(generics.ListCreateAPIView):
                     a parent post, the parent post must exist and its parent
                     post must be null)
         """
-        # Ensure parent post is valid
-        if not self.request.data['parent_post'] is None:
-            parent_object = models.Post.objects.get(id=self.request.data['parent_post'])
-            if parent_object.parent_post_id is not None:
-                raise ValidationError('Can\'t respond to a response')
+        # If parent_post isn't sent in body of request, just ignore it
+        # try catch is used to impose this behaviour
+        try:
+            # Ensure parent post is valid
+            if not self.request.data['parent_post'] is None:
+                # If parent field was null, this is a root post, and just save it
+                if not self.request.data['parent_post'] == '':
+                    # If parent's parent post exists, we can't reply to this post
+                    parent_object = models.Post.objects.get(id=self.request.data['parent_post'])
+                    if parent_object.parent_post_id is not None:
+                        raise ValidationError('Can\'t respond to a response')
+        except KeyError:
+            pass
 
         # Automatically set the author of a post to the user that sent the request
         serializer.save(author=self.request.user)
@@ -59,7 +69,7 @@ class PostModify(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermission)
         Also retrieves and responds with all reply posts to a
         root post
         API endpoints that use this view:
-            - /posts/{post_id}
+            - /postsModify/<int:pk>
    """
     permission_classes = [PostUserWritePermission]
     queryset = models.Post.objects.get_queryset()
@@ -69,6 +79,8 @@ class PostModify(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermission)
 class PostDetail(generics.ListAPIView):
     """
         Post to get a post and all its children posts
+        Endpoints that use this view:
+            - /posts/<int:pk>
     """
     permission_classes = [AllowAny]
     serializer_class = serializers.PostSerializer
@@ -108,40 +120,39 @@ class GetQuestions(generics.ListAPIView):
         return models.TechBehQuestion.objects.all()
 
 
-class UserProgressPermissions(BasePermission):
-    """
-        Creates permission class for user progress - can only access your
-        own progress
-    """
-    message = 'Can only access your own progress'
-
-    def has_permission(self, request, view):
-        return request.user.id == request.resolver_match.kwargs['pk']
-
-
-class UserProgress(generics.ListCreateAPIView, UserProgressPermissions):
+class UserProgress(generics.ListCreateAPIView):
     """
         Gets user progress by getting all questions completed by the user
         Also used to mark a question completed
         API endpoints that use this view:
-            - /userProgress/{user_id}
+            - /userProgress/
     """
-    permission_classes = [UserProgressPermissions]
+    permission_classes = [IsAuthenticated]
     serializer_class = serializers.UserProgress
 
     def perform_create(self, serializer):
         """
             Only allow user to update progress for themselves
         """
-        if self.request.user.id != self.request.data['user_id']:
-            raise ValidationError('Can\'t modify progress for another user')
-        serializer.save()
+        # Ensure question not already marked complete by user
+        questions_done_by_user = models.UserProgress.objects.filter(user_id=self.request.user.id)
+        if questions_done_by_user.filter(question_id=self.request.data['question_id']).\
+                exists():
+            raise ValidationError('Already marked question as completed')
+        # Update user progress
+        model = apps.get_model('users', 'User')
+        user_object = model.objects.get(id=self.request.user.id)
+        user_object.progress_percentage = ((questions_done_by_user.count() + 1) /
+                                           models.TechBehQuestion.objects.count()) * 100
+        # Create user question entry and save object
+        serializer.save(user_id=self.request.user)
+        user_object.save()
 
     def get_queryset(self):
         """
             Return all user progress entries pertaining to the user
         """
-        return models.UserProgress.objects.filter(user_id=self.kwargs['pk'])
+        return models.UserProgress.objects.filter(user_id=self.request.user.id)
 
 
 class QuestionCategories(generics.ListAPIView):

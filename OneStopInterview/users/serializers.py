@@ -1,20 +1,18 @@
 from rest_framework import serializers
-from .models import NewUser
+from .models import User
 
 
 class RegisterUserSerializer(serializers.ModelSerializer):
     """
-    Currently unused in preference of the below.
+        Currently unused in preference of the below.
     """
-    email = serializers.EmailField(required=True)
-    user_name = serializers.CharField(required=True)
-    password = serializers.CharField(min_length=8, write_only=True)
 
     class Meta:
-        model = NewUser
+        model = User
         fields = ('email', 'user_name', 'first_name', 'last_name',
                   'password', 'progress_percentage')
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {'password': {'write_only': True},
+                        'progress_percentage': {'read_only': True}}
 
     def create(self, validated_data):
         password = validated_data.pop('password', None)
@@ -24,3 +22,25 @@ class RegisterUserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """
+        Serializes info for sending to user
+    """
+    class Meta:
+        model = User
+        fields = ('email', 'user_name', 'first_name', 'last_name',
+                  'password', 'progress_percentage')
+        extra_kwargs = {'password': {'write_only': True},
+                        'progress_percentage': {'read_only': True}}
+
+
+class UserClearProgressSerializer(serializers.ModelSerializer):
+    """
+        Serializes data for clearing progress
+    """
+    class Meta:
+        model = User
+        fields = ('progress_percentage',)
+        extra_kwargs = {'progress_percentage': {'read_only': True}}

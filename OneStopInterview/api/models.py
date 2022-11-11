@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.utils import timezone
 
 
@@ -79,3 +78,6 @@ class UserProgress(models.Model):
 
     # Default object manager
     objects = models.Manager()
+
+    def __str__(self):
+        return f"User ID: {self.user_id}, Question ID: {self.question_id}"

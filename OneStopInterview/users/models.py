@@ -39,7 +39,7 @@ class CustomerAccountManager(BaseUserManager):
         return self.create_user(email, user_name, first_name, last_name, password, **other_fields)
 
 
-class NewUser(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(gettext_lazy('email address'), unique=True)
     user_name = models.CharField(max_length=150, unique=True)
     first_name = models.CharField(max_length=150)
@@ -48,7 +48,7 @@ class NewUser(AbstractBaseUser, PermissionsMixin):
     progress_percentage = models.IntegerField(default=0)
     about = models.TextField(gettext_lazy('about'), max_length=500, blank=True)
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     objects = CustomerAccountManager()
 

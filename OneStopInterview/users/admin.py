@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import NewUser
+from .models import User
 from django.db import models
 from django.contrib.auth.admin import UserAdmin
 from django.forms import TextInput, Textarea, CharField, IntegerField
@@ -7,9 +7,9 @@ from django import forms
 
 
 class UserAdminConfig(UserAdmin):
-    model = NewUser
+    model = User
     ordering = ('-start_date',)
-    list_display = ('email', 'user_name', 'first_name', 'last_name',
+    list_display = ('id', 'email', 'user_name', 'first_name', 'last_name',
                     'progress_percentage', 'is_active', 'is_staff')
     search_fields = ('email', 'user_name', 'first_name', 'last_name', 'progress_percentage')
     list_filter = ('email', 'user_name', 'first_name', 'is_active', 'is_staff')
@@ -31,4 +31,4 @@ class UserAdminConfig(UserAdmin):
     )
 
 
-admin.site.register(NewUser, UserAdminConfig)
+admin.site.register(User, UserAdminConfig)
