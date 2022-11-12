@@ -1,2 +1,6 @@
 env
 *.pyc
+db.sqlite3
+OneStopInterview/api/migrations/*
+OneStopInterview/users/migrations/*
+.idea/
