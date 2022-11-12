@@ -1,13 +1,19 @@
 from django.db import models
 from django.utils import timezone
-# Allows for translation of specified fields
+# Gettext lazy allows for translation of specified fields
 from django.utils.translation import gettext_lazy
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 
 class CustomerAccountManager(BaseUserManager):
+    """
+        Account manager for user class
+    """
 
     def create_user(self, email, user_name, first_name, last_name, password, **other_fields):
+        """
+            Ensure email, user name and last name have been provided
+        """
         if not email:
             raise ValueError(gettext_lazy('Must provide an email address'))
         if not user_name:
@@ -17,6 +23,7 @@ class CustomerAccountManager(BaseUserManager):
         if not last_name:
             raise ValueError(gettext_lazy('Must provide a last name'))
 
+        # Save data to database
         email = self.normalize_email(email)
         user = self.model(email=email, user_name=user_name,
                           first_name=first_name, last_name=last_name, **other_fields)
@@ -25,6 +32,9 @@ class CustomerAccountManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, user_name, first_name, last_name, password, **other_fields):
+        """
+            Creates super user (admin)
+        """
         other_fields.setdefault('is_staff', True)
         other_fields.setdefault('is_superuser', True)
         other_fields.setdefault('is_active', True)
@@ -40,6 +50,9 @@ class CustomerAccountManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    """
+        Customized user model. Please refer to ERD
+    """
     email = models.EmailField(gettext_lazy('email address'), unique=True)
     user_name = models.CharField(max_length=150, unique=True)
     first_name = models.CharField(max_length=150)
