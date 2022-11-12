@@ -32,22 +32,13 @@ const darkTheme = createTheme({
 });
 
 function Home() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
-
   return (
     <ThemeProvider theme={darkTheme}>
       <Grid
         container
-        component="main" >
+        sx={{ minHeight: "100vh" }} >
         <Grid
-          sm={4}
+          sm={2}
           md={7}
           sx={{
             backgroundImage: `url(${logo})`,
@@ -61,6 +52,7 @@ function Home() {
               my: 8,
               mx: 4,
               paddingTop: "20px",
+              paddingLeft: "100px",
               flexDirection: "column",
             }}>
             <Typography variant="h5" gutterBottom
@@ -107,12 +99,10 @@ function Home() {
             </Typography>
           </Box>
         </Grid>
-      </Grid>
-        <Grid display="flex" alignItems="center" justifyContent="center" >
+        <Grid display="flex" justifyContent="center" minWidth="100vw" >
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
             alignItem="center"
             sx={{
               my: 3,
@@ -135,6 +125,7 @@ function Home() {
             <Copyright sx={{ mt: 5 }} />
           </Box>
         </Grid>
+      </Grid>
     </ThemeProvider>
   );
 }
