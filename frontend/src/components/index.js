@@ -3,3 +3,5 @@
 export { default as Navbar } from "./Navbar";
 export { default as Register } from "./register";
 export { default as Logout } from "./logout";
+export { default as Sidebar } from "./Sidebar";
+export { default as Wrapper } from "./wrapper";
