@@ -1,9 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import { Box, Typography, Button } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Avatar from "@mui/material/Avatar";
 const theme = createTheme({
   typography: {
     button: {
@@ -89,11 +88,31 @@ function Navbar() {
             }}
             mr={5}>
             <Link to="/login">
-              <Typography sx={{ fontSize: "18px" }} pr={4}>
-                Login/Signup
-              </Typography>
+              <Box
+                pr={3}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}>
+                <Box px={1}>
+                  <Button
+                    type="button"
+                    sx={{ color: "white" }}
+                    variant="outlined">
+                    Log In
+                  </Button>
+                </Box>
+                <Button
+                  type="button"
+                  sx={{ color: "white" }}
+                  variant="outlined"
+                  component={NavLink}
+                  to="/logout">
+                  Log Out
+                </Button>
+              </Box>
             </Link>
-            <Avatar />
           </Box>
         </Box>
       </ThemeProvider>

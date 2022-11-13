@@ -1,50 +1,58 @@
-import React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
+import React, { useState } from "react";
+import axiosInstance from "../axios";
+import {
+  Avatar,
+  Button,
+  TextField,
+  Box,
+  Grid,
+  Typography,
+} from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import logo from "../assets/logo.svg";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}>
-      {"Copyright © "}
-      <Link color="inherit" href="https://onestopinterview.com/">
-        OneStopInterview.com
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-});
+import theme from "../themes/theme";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+  const navigate = useNavigate();
+  const initialFormData = Object.freeze({
+    username: "",
+    password: "",
+  });
+
+  const [formData, updateFormData] = useState(initialFormData);
+
+  const handleChange = (e) => {
+    updateFormData({
+      ...formData,
+      // Trimming any whitespace
+      [e.target.name]: e.target.value.trim(),
     });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+
+    axiosInstance
+      .post(`token/`, {
+        user_name: formData.username,
+        password: formData.password,
+      })
+      .then((res) => {
+        localStorage.setItem("access_token", res.data.access);
+        localStorage.setItem("refresh_token", res.data.refresh);
+        axiosInstance.defaults.headers["Authorization"] =
+          "JWT " + localStorage.getItem("access_token");
+        navigate("/");
+        console.log(res);
+        console.log(res.data);
+      });
+  };
+
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <Grid
         container
         component="main"
@@ -83,11 +91,15 @@ export default function Login() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                autoComplete="email"
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
                 autoFocus
+                inputProps={{ style: { color: "white" } }}
+                InputLabelProps={{ style: { color: "white" } }}
+                SelectProps={{ style: { color: "white" } }}
+                onChange={handleChange}
               />
               <TextField
                 margin="normal"
@@ -98,11 +110,12 @@ export default function Login() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                inputProps={{ style: { color: "white" } }}
+                InputLabelProps={{ style: { color: "white" } }}
+                SelectProps={{ style: { color: "white" } }}
+                onChange={handleChange}
               />
               <Grid item align="right">
-                <Link href="#" variant="body2">
-                  Forgot your password?
-                </Link>
                 <Button
                   type="submit"
                   fullWidth
@@ -117,28 +130,33 @@ export default function Login() {
                 </Button>
               </Grid>
               <Grid item>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  align="center">
+                <Typography variant="body2" align="center">
                   Don't have an account yet?
                 </Typography>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{
-                    mt: 1,
-                    mb: 2,
-                    backgroundColor: "transparent",
-                    color: "white",
-                    border: "1px solid white",
-                    borderRadius: "12px",
+                <Link
+                  to="/register"
+                  style={{
+                    textDecoration: "none",
+                    color: "inherit",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}>
-                  Registration
-                </Button>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    sx={{
+                      mt: 1,
+                      mb: 2,
+                      backgroundColor: "transparent",
+                      color: "white",
+                      border: "1px solid white",
+                      borderRadius: "12px",
+                    }}>
+                    Register
+                  </Button>
+                </Link>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
         </Grid>

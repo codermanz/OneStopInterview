@@ -10,12 +10,16 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: "#4C94FF",
+      main: "#FFFFF",
       light: "#C4DCFF",
     },
+    mode: "dark",
   },
   button: {
     textTransform: "none",
+  },
+  TextField: {
+    color: "#FFFFF",
   },
 });
 

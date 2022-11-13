@@ -6,9 +6,10 @@ import {
   Login,
   ResumeTips,
   Roadmap,
+  Registration,
   Checkpoints,
 } from "./pages";
-import { Navbar } from "./components";
+import { Navbar, Logout } from "./components";
 import CssBaseline from "@mui/material/CssBaseline";
 
 function App() {
@@ -25,6 +26,8 @@ function App() {
             <Route path="/resume-tips" element={<ResumeTips />} />
             <Route path="/roadmap" element={<Roadmap />} />
             <Route path="/resume-tips/checkpoints" element={<Checkpoints />} />
+            <Route path="/register" element={<Registration />} />
+            <Route path="/logout" element={<Logout />}></Route>
           </Routes>
         </div>
       </Router>
