@@ -12,6 +12,7 @@ function Home() {
       <Box sx={{ minHeight: "100vh" }}>
         <Grid container>
           <Grid
+            item
             sm={2}
             md={7}
             sx={{

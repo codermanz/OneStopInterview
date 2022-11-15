@@ -12,7 +12,11 @@ const theme = createTheme({
   },
 });
 
-function Navbar() {
+function Navbar(props) {
+  const handleLogout = () => {
+    props.onLoadingChange(!props.state.loading);
+  };
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -87,32 +91,39 @@ function Navbar() {
               flexGrow: "1",
             }}
             mr={5}>
-            <Link to="/login">
-              <Box
-                pr={3}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}>
-                <Box px={1}>
+            <Box
+              pr={3}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}>
+              {props.state.username ? (
+                <>
+                  <Box px={3}>
+                    <Typography variant="h5">{props.state.username}</Typography>
+                  </Box>
                   <Button
                     type="button"
                     sx={{ color: "white" }}
-                    variant="outlined">
-                    Log In
+                    variant="outlined"
+                    component={NavLink}
+                    to="/logout"
+                    onClick={handleLogout}>
+                    Log Out
                   </Button>
-                </Box>
+                </>
+              ) : (
                 <Button
                   type="button"
                   sx={{ color: "white" }}
                   variant="outlined"
                   component={NavLink}
-                  to="/logout">
-                  Log Out
+                  to="/login">
+                  Log In
                 </Button>
-              </Box>
-            </Link>
+              )}
+            </Box>
           </Box>
         </Box>
       </ThemeProvider>

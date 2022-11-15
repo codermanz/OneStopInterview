@@ -1,11 +1,7 @@
 import React from "react";
-import {
-  Divider,
-  Typography,
-  ThemeProvider,
-  createTheme,
-} from "@mui/material";
+import { Divider, Typography, ThemeProvider, createTheme } from "@mui/material";
 import InterviewButtonContent from "./InterviewButtonContent";
+import Sidebar from "../Sidebar";
 
 function TechnicalInterviewComponent() {
   // Theme for rounded corners to make the button resemble a pill
@@ -22,7 +18,9 @@ function TechnicalInterviewComponent() {
   */
   return (
     <div>
-      <Typography variant="h6" sx={{ margin: "10px", color: "#FFCD4C" }}>Topic 1</Typography>
+      <Typography variant="h6" sx={{ margin: "10px", color: "#FFCD4C" }}>
+        Topic 1
+      </Typography>
       <ThemeProvider theme={pillTheme}>
         <InterviewButtonContent
           buttonText={"Question 1 Topic 1"}
@@ -48,7 +46,9 @@ function TechnicalInterviewComponent() {
 
       <Divider sx={{ margin: "20px" }} />
 
-      <Typography variant="h6" sx={{ margin: "10px", color: "#FFCD4C" }}>Topic 2</Typography>
+      <Typography variant="h6" sx={{ margin: "10px", color: "#FFCD4C" }}>
+        Topic 2
+      </Typography>
       <ThemeProvider theme={pillTheme}>
         <InterviewButtonContent
           buttonText={"Question 1 Topic 2"}
@@ -58,7 +58,9 @@ function TechnicalInterviewComponent() {
 
       <Divider sx={{ margin: "20px" }} />
 
-      <Typography variant="h6" sx={{ margin: "10px", color: "#FFCD4C" }}>Topic 2</Typography>
+      <Typography variant="h6" sx={{ margin: "10px", color: "#FFCD4C" }}>
+        Topic 2
+      </Typography>
       <ThemeProvider theme={pillTheme}>
         <InterviewButtonContent
           buttonText={"Question 1 Topic 2"}
@@ -68,7 +70,9 @@ function TechnicalInterviewComponent() {
 
       <Divider sx={{ margin: "20px" }} />
 
-      <Typography variant="h6" sx={{ margin: "10px", color: "#FFCD4C" }}>Topic 2</Typography>
+      <Typography variant="h6" sx={{ margin: "10px", color: "#FFCD4C" }}>
+        Topic 2
+      </Typography>
       <ThemeProvider theme={pillTheme}>
         <InterviewButtonContent
           buttonText={"Question 1 Topic 2"}
@@ -78,7 +82,9 @@ function TechnicalInterviewComponent() {
 
       <Divider sx={{ margin: "20px" }} />
 
-      <Typography variant="h6" sx={{ margin: "10px", color: "#FFCD4C" }}>Topic 2</Typography>
+      <Typography variant="h6" sx={{ margin: "10px", color: "#FFCD4C" }}>
+        Topic 2
+      </Typography>
       <ThemeProvider theme={pillTheme}>
         <InterviewButtonContent
           buttonText={"Question 1 Topic 2"}
