@@ -1,7 +1,8 @@
 import React from "react";
 import { Box } from "@mui/material";
 import Sidebar from "./Sidebar";
-const wrapper = ({ children }) => {
+
+const Wrapper = ({ children }) => {
   return (
     <div className="container">
       <Box
@@ -18,4 +19,4 @@ const wrapper = ({ children }) => {
   );
 };
 
-export default wrapper;
+export default Wrapper;

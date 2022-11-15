@@ -48,7 +48,8 @@ export default function SignUp() {
         navigate("/login");
         console.log(res);
         console.log(res.data);
-      });
+      })
+      .catch((err) => console.log(err));
   };
 
   return (

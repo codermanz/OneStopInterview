@@ -48,7 +48,8 @@ export default function Login() {
         navigate("/");
         console.log(res);
         console.log(res.data);
-      });
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -66,8 +67,9 @@ export default function Login() {
             backgroundPosition: "center",
           }}
           marginBottom="120px"
+          item
         />
-        <Grid item xs={12} sm={8} md={5} elevation={6} square>
+        <Grid item xs={12} sm={8} md={5} elevation={6} square="true">
           <Box
             sx={{
               my: 8,
