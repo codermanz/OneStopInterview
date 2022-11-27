@@ -12,7 +12,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TechnicalInterviewComponent from "../components/interview-components/TechnicalInterviewComponent";
 import BehavioralInterviewComponent from "../components/interview-components/BehavioralInterviewComponent";
-import { Sidebar } from "../components/index";
+import { Sidebar, Loader } from "../components/index";
 import { useEffect } from "react";
 import axiosInstance from "../axios";
 
@@ -80,20 +80,7 @@ function InterviewPage(props) {
       - 2 Accordion components for Technical and Behavioral Interview Questions
    */
   if (questions === undefined || appState.postProgress === null) {
-    return (
-      <Box
-        sx={{
-          backgroundColor: "#151517",
-          minHeight: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          width: "100%",
-        }}>
-        <Typography variant="h4" color="white">
-          Loading...
-        </Typography>
-      </Box>
-    );
+    return <Loader />;
   }
 
   return (

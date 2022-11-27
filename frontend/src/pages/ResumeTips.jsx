@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Typography, createTheme } from "@mui/material";
+import { Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import List from "../components/Joblist-components/List";
 
