@@ -22,25 +22,22 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("Get User Info");
     axiosInstance
       .get(`/user/userInfo/`)
       .then((res) => {
-        console.log("Trying to get userInfo");
         const result = res.data;
-        console.log(result);
-        setLoading(false);
         setAppState({
           username: result.user_name,
           progress: result.progress_percentage,
         });
+        setLoading(false);
       })
       .catch((err) => {
         setLoading(false);
         let errorBody = err.response;
         return Promise.resolve(errorBody);
       });
-  }, [appState]);
+  }, []);
 
   return (
     <>
@@ -54,7 +51,10 @@ function App() {
               <Navbar state={appState} />
               <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
+                <Route
+                  path="/login"
+                  element={<Login setState={setAppState} />}
+                />
                 <Route
                   path="/interview"
                   element={<InterviewPage state={appState} />}
@@ -66,7 +66,10 @@ function App() {
                   element={<Checkpoints />}
                 />
                 <Route path="/register" element={<Registration />} />
-                <Route path="/logout" element={<Logout />} />
+                <Route
+                  path="/logout"
+                  element={<Logout setState={setAppState} />}
+                />
                 <Route path="*" element={<Error />} />
               </Routes>
             </>

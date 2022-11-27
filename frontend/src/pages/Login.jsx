@@ -37,7 +37,7 @@ function BadLogin(props) {
   );
 }
 
-export default function Login() {
+export default function Login(props) {
   const navigate = useNavigate();
 
   const [alert, setAlert] = useState(false);
@@ -73,10 +73,13 @@ export default function Login() {
           localStorage.setItem("refresh_token", res.data.refresh);
           axiosInstance.defaults.headers["Authorization"] =
             "JWT " + localStorage.getItem("access_token");
+          props.setState({ username: formData.username });
           navigate("/");
         })
         .catch((err) => {
           setAlert(true);
+          let errorBody = err.response;
+          return Promise.resolve(errorBody);
         })
         .then(() => {
           setLoading(false);

@@ -49,7 +49,10 @@ export default function SignUp() {
         console.log(res);
         console.log(res.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        let errorBody = err.response;
+        return Promise.resolve(errorBody);
+      });
   };
 
   return (
