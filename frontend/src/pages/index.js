@@ -7,3 +7,4 @@ export { default as ResumeTips } from "./ResumeTips";
 export { default as Roadmap } from "./Roadmap";
 export { default as Checkpoints } from "./Checkpoints";
 export { default as Registration } from "./Registration";
+export { default as Error } from "./Error";

@@ -8,60 +8,69 @@ import {
   Roadmap,
   Registration,
   Checkpoints,
+  Error,
 } from "./pages";
-import { Navbar, Logout } from "./components";
+import { Navbar, Logout, Loader } from "./components";
 import CssBaseline from "@mui/material/CssBaseline";
 import axiosInstance from "./axios";
 
 function App() {
   const [appState, setAppState] = useState({
-    loading: true,
     username: null,
     postProgress: null,
   });
-
-  const handleLoadingChange = (newValue) => {
-    setAppState({
-      ...appState,
-      loading: newValue,
-    });
-  };
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log("Get User Info");
     axiosInstance
       .get(`/user/userInfo/`)
       .then((res) => {
         console.log("Trying to get userInfo");
         const result = res.data;
         console.log(result);
+        setLoading(false);
         setAppState({
-          loading: false,
           username: result.user_name,
           progress: result.progress_percentage,
         });
       })
-      .catch((err) => console.log(err));
-  }, [setAppState]);
+      .catch((err) => {
+        setLoading(false);
+        let errorBody = err.response;
+        return Promise.resolve(errorBody);
+      });
+  }, [appState]);
 
   return (
     <>
       <CssBaseline />
       <Router>
         <div className="bg-dark-bg">
-          <Navbar state={appState} onLoadingChange={handleLoadingChange} />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route
-              path="/interview"
-              element={<InterviewPage state={appState} />}
-            />
-            <Route path="/resume-tips" element={<ResumeTips />} />
-            <Route path="/roadmap" element={<Roadmap />} />
-            <Route path="/resume-tips/checkpoints" element={<Checkpoints />} />
-            <Route path="/register" element={<Registration />} />
-            <Route path="/logout" element={<Logout />}></Route>
-          </Routes>
+          {loading ? (
+            <Loader />
+          ) : (
+            <>
+              <Navbar state={appState} />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route
+                  path="/interview"
+                  element={<InterviewPage state={appState} />}
+                />
+                <Route path="/resume-tips" element={<ResumeTips />} />
+                <Route path="/roadmap" element={<Roadmap />} />
+                <Route
+                  path="/resume-tips/checkpoints"
+                  element={<Checkpoints />}
+                />
+                <Route path="/register" element={<Registration />} />
+                <Route path="/logout" element={<Logout />} />
+                <Route path="*" element={<Error />} />
+              </Routes>
+            </>
+          )}
         </div>
       </Router>
     </>
