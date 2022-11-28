@@ -60,7 +60,7 @@ function App() {
                   element={<InterviewPage state={appState} />}
                 />
                 <Route path="/resume-tips" element={<ResumeTips />} />
-                <Route path="/roadmap" element={<Roadmap />} />
+                <Route path="/roadmap" element={<Roadmap state={appState}/>} />
                 <Route
                   path="/resume-tips/checkpoints"
                   element={<Checkpoints />}
