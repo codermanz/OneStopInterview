@@ -6,13 +6,19 @@ export default function Logout(props) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const response = axiosInstance.post("user/logout/blacklist/", {
-      refresh_token: localStorage.getItem("refresh_token"),
-    });
+    console.log("Logging out.");
+    axiosInstance
+      .post("user/logout/blacklist/", {
+        refresh_token: localStorage.getItem("refresh_token"),
+      })
+      .catch((err) => {
+        let errorBody = err.response;
+        return Promise.resolve(errorBody);
+      });
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     axiosInstance.defaults.headers["Authorization"] = null;
-    props.setState({ username: null, postProgress: null });
+    props.setState({ username: null, progress: null });
     navigate("/login");
   });
 

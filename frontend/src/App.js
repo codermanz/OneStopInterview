@@ -17,11 +17,11 @@ import axiosInstance from "./axios";
 function App() {
   const [appState, setAppState] = useState({
     username: null,
-    postProgress: null,
+    progress: null,
   });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const getUserInfo = () => {
     axiosInstance
       .get(`/user/userInfo/`)
       .then((res) => {
@@ -30,13 +30,16 @@ function App() {
           username: result.user_name,
           progress: result.progress_percentage,
         });
-        setLoading(false);
       })
       .catch((err) => {
-        setLoading(false);
         let errorBody = err.response;
         return Promise.resolve(errorBody);
-      });
+      })
+      .then(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    getUserInfo();
   }, []);
 
   return (
@@ -60,7 +63,7 @@ function App() {
                   element={<InterviewPage state={appState} />}
                 />
                 <Route path="/resume-tips" element={<ResumeTips />} />
-                <Route path="/roadmap" element={<Roadmap state={appState}/>} />
+                <Route path="/roadmap" element={<Roadmap state={appState} />} />
                 <Route
                   path="/resume-tips/checkpoints"
                   element={<Checkpoints />}

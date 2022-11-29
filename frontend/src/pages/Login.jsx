@@ -73,7 +73,19 @@ export default function Login(props) {
           localStorage.setItem("refresh_token", res.data.refresh);
           axiosInstance.defaults.headers["Authorization"] =
             "JWT " + localStorage.getItem("access_token");
-          props.setState({ username: formData.username });
+          axiosInstance
+            .get(`/user/userInfo/`)
+            .then((res) => {
+              const result = res.data;
+              props.setState({
+                username: result.user_name,
+                progress: result.progress_percentage,
+              });
+            })
+            .catch((err) => {
+              let errorBody = err.response;
+              return Promise.resolve(errorBody);
+            });
           navigate("/");
         })
         .catch((err) => {

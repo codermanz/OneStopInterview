@@ -15,20 +15,16 @@ import BehavioralInterviewComponent from "../components/interview-components/Beh
 import { Sidebar, Loader } from "../components/index";
 import { useEffect } from "react";
 import axiosInstance from "../axios";
+import theme from "../themes/theme";
 
 function InterviewPage(props) {
-  // Handle the state changes so only one panel in the accordion
-  // is open at a time
   const [expanded, setExpanded] = useState(false);
-  const [appState, setAppState] = useState({
-    loading: false,
-    username: null,
-    postProgress: null,
-  });
-
+  const [loading, setLoading] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [questions, setQuestions] = useState();
 
   const handleCheck = (e) => {
+    // TODO: Set loading after check
     const questionID = { question_id: e.target.value };
     axiosInstance
       .post(`/userProgress/`, questionID)
@@ -47,20 +43,21 @@ function InterviewPage(props) {
     axiosInstance
       .get(`/questionsBank/`)
       .then((res) => {
-        console.log("Trying to get questions.");
         const result = res.data;
-        console.log(result);
         setQuestions(result);
       })
       .catch((err) => {
         let errorBody = err.response;
         return Promise.resolve(errorBody);
+      })
+      .then(() => {
+        setLoading(false);
       });
   };
 
   useEffect(() => {
     if (props.state.progress != null) {
-      setAppState(props.state);
+      setLoggedIn(true);
     }
   }, [props.state]);
 
@@ -68,21 +65,11 @@ function InterviewPage(props) {
     getQuestions();
   }, []);
 
-  // Use dark theme components
-  const darkTheme = createTheme({
-    palette: {
-      mode: "dark",
-    },
-  });
-
-  /*
-      InterviewPage.jsx will return:
-      - 2 Accordion components for Technical and Behavioral Interview Questions
-   */
-  if (questions === undefined || appState.postProgress === null) {
+  if (loading) {
     return <Loader />;
   }
 
+  console.log(questions);
   return (
     <Box
       sx={{
@@ -91,8 +78,8 @@ function InterviewPage(props) {
         alignItems: "flex-start",
         justifyContent: "flex-start",
       }}>
-      {appState.progress != null ? (
-        <Sidebar progress={appState.progress} />
+      {props.state.progress != null ? (
+        <Sidebar progress={props.state.progress} />
       ) : null}
       <Box
         sx={{
@@ -142,7 +129,7 @@ function InterviewPage(props) {
                 </Button>
               </Box>
             </Box>
-            <ThemeProvider theme={darkTheme}>
+            <ThemeProvider theme={theme}>
               <div style={{ margin: "auto", padding: "20px", width: "80%" }}>
                 <Accordion
                   sx={{ padding: "10px" }}

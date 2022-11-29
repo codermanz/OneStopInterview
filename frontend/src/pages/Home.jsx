@@ -98,6 +98,7 @@ function Home() {
               <Button
                 fullWidth
                 variant="contained"
+                href="/login"
                 sx={{
                   mt: 1,
                   mb: 2,
