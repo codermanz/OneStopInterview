@@ -20,45 +20,108 @@ function Roadmap(props) {
   // If isUserLoggedIn is null, no user is logged in
   const isUserLoggedIn = props.state.username ? true : false;
 
+  // Handle accordion state change
+  const [expanded, setExpanded] = useState(false);
+
+  // Handle roadmap question IDs
+  let roadmapQuestions = {
+    frontend_id: null,
+    backend_id: null,
+  };
+
+  const [frontendID, setFrontendID] = useState();
+  const [backendID, setBackendID] = useState();
+
+  // Checkbox checkmarks and labels
+  const [isFrontendChecked, setIsFrontendChecked] = useState(false);
+  const [isBackendChecked, setIsBackendChecked] = useState(false);
+  const [frontendCheckboxLabel, setFrontendCheckboxLabel] = useState(
+    "Please log in to save your frontend roadmap progress"
+  );
+  const [backendCheckboxLabel, setBackendCheckboxLabel] = useState(
+    "Please log in to save your backend roadmap progress"
+  );
+
   // Handle if loading bar should be shown
   const [loading, setLoading] = useState(true);
 
-  // Handle roadmap IDs
-  const [roadmapQuestions, setRoadmapQuestions] = useState({
-    frontend_id: null,
-    backend_id: null,
-  });
+  // Handle change of accordion expansion
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
-  // Get the question ID for roadmaps
-  const getQuestions = async () => {
-    // The get request will only be executed if the user is logged in
+  const getIsFrontendBackendChecked = async () => {
+    // First, retrieve the roadmap questions.
     if (isUserLoggedIn) {
       axiosInstance
-      .get(`/questionsBank/`)
-      .then((res) => {
-        console.log("did the get request for question bank")
-        const result = res.data;
-        const ids = result.filter(
-          (obj) => obj.question_category === "roadmaps"
-        );
-        
-        // Get the question ID for backend and frontend roadmap
-        const fe = ids.find((obj) => obj.question_name === "Frontend Roadmap");
-        const be = ids.find((obj) => obj.question_name === "Backend Roadmap");
+        .get(`/questionsBank/`)
+        .then((res) => {
+          const result = res.data;
+          const ids = result.filter(
+            (obj) => obj.question_category === "roadmaps"
+          );
 
-        // Set the frontend and backend question id
-        setRoadmapQuestions({
-          frontend_id: fe.id,
-          backend_id: be.id,
+          // Get the question ID for backend and frontend roadmap
+          const fe = ids.find(
+            (obj) => obj.question_name === "Frontend Roadmap"
+          );
+          const be = ids.find((obj) => obj.question_name === "Backend Roadmap");
+
+          roadmapQuestions = {
+            frontend_id: fe.id,
+            backend_id: be.id,
+          };
+
+          // Second, determine the state of the roadmap checkboxes
+          axiosInstance
+            .get(`/userProgress/`)
+            .then((userProgressResult) => {
+              setFrontendID(roadmapQuestions.frontend_id);
+              setBackendID(roadmapQuestions.backend_id);
+
+              // Iterate through userProgressResult.data to get just question ID numbers
+              let questionIDArray = [];
+              userProgressResult.data.forEach((item) =>
+                questionIDArray.push(item["question_id"])
+              );
+
+              // Determine the checkbox states
+              if (questionIDArray.includes(roadmapQuestions.frontend_id)) {
+                // If the user answered frontend question, marked and disabled
+                setIsFrontendChecked(true);
+                setFrontendCheckboxLabel(
+                  "You have marked frontend roadmap as completed"
+                );
+              } else {
+                // If the user has not answered, not marked and not disabled
+                setIsFrontendChecked(false);
+                setFrontendCheckboxLabel("Mark frontend roadmap as completed");
+              }
+
+              if (questionIDArray.includes(roadmapQuestions.backend_id)) {
+                // If the user answered backend question, marked and disabled
+                setIsBackendChecked(true);
+                setBackendCheckboxLabel(
+                  "You have marked backend roadmap as completed"
+                );
+              } else {
+                // If the user has not answered, not marked and not disabled
+                setIsBackendChecked(false);
+                setBackendCheckboxLabel("Mark backend roadmap as completed");
+              }
+            })
+            .catch((err) => {
+              let errorBody = err.response;
+              return Promise.resolve(errorBody);
+            });
+        })
+        .catch((err) => {
+          let errorBody = err.response;
+          return Promise.resolve(errorBody);
+        })
+        .then(() => {
+          setLoading(false);
         });
-      })
-      .catch((err) => {
-        let errorBody = err.response;
-        return Promise.resolve(errorBody);
-      })
-      .then(() => {
-        setLoading(false);
-      });
     } else {
       // If the user is not logged in, stop loading and show the page
       //  without doing the get request
@@ -66,17 +129,14 @@ function Roadmap(props) {
     }
   };
 
+  // Executed on page load
   useEffect(() => {
-    getQuestions();
+    getIsFrontendBackendChecked();
   }, []);
 
-  // Handle accordion state change
-  const [expanded, setExpanded] = useState(false);
-
-  // Handle change of accordion expansion
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
+  if (loading) {
+    return <Loader />;
+  }
 
   // Use dark theme components
   const darkTheme = createTheme({
@@ -84,10 +144,6 @@ function Roadmap(props) {
       mode: "dark",
     },
   });
-
-  if (loading) {
-    return <Loader />;
-  }
 
   return (
     <Box
@@ -136,13 +192,12 @@ function Roadmap(props) {
                 </AccordionDetails>
                 <CheckboxRoadmapComponent
                   isFrontendOrBackend={"Frontend"}
-                  isEnabled={isUserLoggedIn}
-                  frontend_id={roadmapQuestions?.frontend_id}
-                  labelText={
-                    isUserLoggedIn
-                      ? "Mark frontend roadmap as completed"
-                      : "Please log in to save your frontend roadmap progress"
+                  isDisabled={
+                    isUserLoggedIn && !isFrontendChecked ? false : true
                   }
+                  isChecked={isFrontendChecked}
+                  frontend_id={frontendID}
+                  labelText={frontendCheckboxLabel}
                 />
               </Accordion>
 
@@ -163,13 +218,12 @@ function Roadmap(props) {
                 </AccordionDetails>
                 <CheckboxRoadmapComponent
                   isFrontendOrBackend={"Backend"}
-                  isEnabled={isUserLoggedIn}
-                  backend_id={roadmapQuestions?.backend_id}
-                  labelText={
-                    isUserLoggedIn
-                      ? "Mark backend roadmap as completed"
-                      : "Please log in to save your backend roadmap progress"
+                  isDisabled={
+                    isUserLoggedIn && !isBackendChecked ? false : true
                   }
+                  isChecked={isBackendChecked}
+                  backend_id={backendID}
+                  labelText={backendCheckboxLabel}
                 />
               </Accordion>
             </div>

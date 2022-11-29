@@ -1,22 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 import axiosInstance from "../../axios";
 
 function CheckboxRoadmapComponent(props) {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(props.isChecked);
+  const [isDisabled, setIsDisabled] = useState(props.isDisabled);
+  const [labelText, setLabelText] = useState(props.labelText);
+  const [frontendID, setFrontendID] = useState(props.frontend_id);
+  const [backendID, setBackendID] = useState(props.backend_id);
+  
+  useEffect(() => {
+    setChecked(props.isChecked);
+  }, [props.isChecked]);
+
+  useEffect(() => {
+    setIsDisabled(props.isDisabled);
+  }, [props.isDisabled]);
+
+  useEffect(() => {
+    setLabelText(props.labelText);
+  }, [props.labelText]);
+
+  useEffect(() => {
+    setFrontendID(props.frontend_id);
+  }, [props.frontend_id]);
+
+  useEffect(() => {
+    setBackendID(props.backend_id);
+  }, [props.backend_id]);
 
   const handleChange = (event) => {
-    setChecked(event.target.checked);
-    
+    setChecked(true);
     // !checked means that the checkbox has the checkmark on it
     if (!checked) {
       let questionID = { question_id: null };
 
       // Get the question ID passed from Roadmap
       if (props.isFrontendOrBackend === "Frontend") {
-        questionID = { question_id: props.frontend_id };
+        questionID = { question_id: frontendID };
       } else if (props.isFrontendOrBackend === "Backend") {
-        questionID = { question_id: props.backend_id };
+        questionID = { question_id: backendID };
       }
 
       // Post the userProgress with the questionID
@@ -24,29 +47,27 @@ function CheckboxRoadmapComponent(props) {
         axiosInstance
           .post(`/userProgress/`, questionID)
           .then(() => {
-            // Disable the checkbox so it can't be clicked again
-            event.target.setAttribute("disabled", "");
+            setLabelText("Marked as completed");
+            setIsDisabled(true);
           })
           .catch((err) => {
-            // Disable the checkbox so it can't be clicked again
-            event.target.setAttribute("disabled", "");
-
             let errorBody = err.response;
             return Promise.resolve(errorBody);
-          });
+          })
+          .then(() => {
+            setIsDisabled(true);
+          })
       }
-    } else {
-      console.log("currently NOT checked");
     }
   };
 
   return (
     <FormGroup sx={{ padding: "20px" }}>
       <FormControlLabel
-        label={props.labelText}
+        label={labelText}
         control={
           <Checkbox
-            disabled={!props.isEnabled}
+            disabled={isDisabled}
             checked={checked}
             onChange={handleChange}
           />
