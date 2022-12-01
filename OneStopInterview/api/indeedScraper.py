@@ -1,5 +1,5 @@
-from bs4 import BeautifulSoup
 import cloudscraper
+from bs4 import BeautifulSoup
 
 
 class UnableToFindJobDivs(Exception):
@@ -71,7 +71,8 @@ def transform(soup):
         company = div.find('span', class_='companyName').text.strip()
         job_location = div.find('div', class_='companyLocation').text.strip()
         # Extract unwanted posted tag
-        job_posting_date = div.find('span', class_='date').text.strip().replace('Posted', '')
+        job_posting_date = div.find('span', class_='date').text.strip()\
+            .replace('Posted', '').replace('EmployerActive', '')
         try:
             job_salary = div.find('span', class_='estimated-salary').text.strip()
         except AttributeError:
@@ -89,12 +90,12 @@ def transform(soup):
 
     return joblist
 
-
-if __name__ == '__main__':
-    # Sample run
-    html_data = extract_data("Python Developer", "Fremont CA", 0)
-    job_list = transform(html_data)
-    for item in job_list:
-        # Print for testing purposes
-        print(item['title'] + " @ " + item['company'] + " URL: " + item['job_url'] + " @ " + item['location'] +
-              " that pays: " + item['salary'] + " - Posted: " + item['posted_date'])
+# Stand-alone script testing
+# if __name__ == '__main__':
+#     # Sample run
+#     html_data = extract_data("python developer", "Atlanta GA", 50)
+#     job_list = transform(html_data)
+#     for item in job_list:
+#         # Print for testing purposes
+#         print(item['title'] + " @ " + item['company'] + " URL: " + item['job_url'] + " @ " + item['location'] +
+#               " that pays: " + item['salary'] + " - Posted: " + item['posted_date'])
