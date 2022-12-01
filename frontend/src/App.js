@@ -10,6 +10,10 @@ import {
   Checkpoints,
   Error,
 } from "./pages";
+import Forums from "./pages/Forums";
+import PostList from "./pages/PostList";
+import Post from "./pages/Post";
+import AddPost from "./pages/AddPost";
 import { Navbar, Logout, Loader } from "./components";
 import CssBaseline from "@mui/material/CssBaseline";
 import axiosInstance from "./axios";
@@ -62,17 +66,15 @@ function App() {
                   path="/interview"
                   element={<InterviewPage state={appState} />}
                 />
+                <Route path="/forums" element={<Forums />} />
+                <Route path="/forums/postlist" element={<PostList />} />
+                <Route path="/forums/post" element={<Post />} />
+                <Route path="/forums/addpost" element={<AddPost />} />
                 <Route path="/resume-tips" element={<ResumeTips />} />
+                <Route path="/resume-tips/checkpoints" element={<Checkpoints />} />
                 <Route path="/roadmap" element={<Roadmap state={appState} />} />
-                <Route
-                  path="/resume-tips/checkpoints"
-                  element={<Checkpoints />}
-                />
                 <Route path="/register" element={<Registration />} />
-                <Route
-                  path="/logout"
-                  element={<Logout setState={setAppState} />}
-                />
+                <Route path="/logout" element={<Logout setState={setAppState} />} />
                 <Route path="*" element={<Error />} />
               </Routes>
             </>
