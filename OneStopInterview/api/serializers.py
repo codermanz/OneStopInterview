@@ -41,3 +41,12 @@ class UserProgress(serializers.ModelSerializer):
         model = models.UserProgress
         fields = ('user_id', 'question_id')
         extra_kwargs = {'user_id': {'read_only': True}}
+
+
+class JobPosting(serializers.Serializer): # noqa
+    title = serializers.CharField()
+    job_url = serializers.CharField()
+    company = serializers.CharField()
+    location = serializers.CharField()
+    posted_date = serializers.CharField()
+    salary = serializers.CharField()

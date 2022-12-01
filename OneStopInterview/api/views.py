@@ -6,6 +6,7 @@ from . import models
 from . import serializers
 from django.db.models import Q
 from django.apps import apps
+from . import indeedScraper
 
 
 class PostList(generics.ListCreateAPIView):
@@ -136,7 +137,7 @@ class UserProgress(generics.ListCreateAPIView):
         """
         # Ensure question not already marked complete by user
         questions_done_by_user = models.UserProgress.objects.filter(user_id=self.request.user.id)
-        if questions_done_by_user.filter(question_id=self.request.data['question_id']).\
+        if questions_done_by_user.filter(question_id=self.request.data['question_id']). \
                 exists():
             raise ValidationError('Already marked question as completed')
         # Update user progress
@@ -172,4 +173,18 @@ class JobPostings(generics.ListAPIView):
         API endpoints that use this view:
             - /jobPostings
     """
-    pass
+    permission_classes = [AllowAny]
+    serializer_class = serializers.JobPosting
+
+    def get_queryset(self):
+        """
+            Return questions according to category defined in optional
+            parameter. Default returns all questions
+        """
+        job_title = self.request.data['job_title']
+        location = self.request.data['location']
+
+        job_list = indeedScraper.transform(indeedScraper.extract_data(job_title, location, 0))
+
+        # Return all jobs
+        return job_list
