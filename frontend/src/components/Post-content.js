@@ -9,7 +9,7 @@ import CardContent from '@mui/material/CardContent';
 import Box from '@mui/material/Box';
 import axios from 'axios';
 
-const baseURL = "https://onestopinterview.onrender.com/api";
+const baseURL = "http://127.0.0.1:8000/api";
 
 
 function stringAvatar(name) {
