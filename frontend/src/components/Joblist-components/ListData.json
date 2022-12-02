@@ -1,0 +1,104 @@
+[
+  {
+    "id": 1,
+    "text": "Network Security Engineer",
+    "skills": [
+      "Firewall management tools",
+      "Routing protocol expertise",
+      "Cisco equipment familiarity",
+      "Problem solving",
+      "Communication",
+      "Pressure management",
+      "Teamwork"
+    ]
+  },
+  {
+    "id": 2,
+    "text": "Frontend Engineer",
+    "skills": [
+      "Web development",
+      "Javascript",
+      "SQL",
+      "Adobe Creative Suite",
+      "React.js",
+      "Creativity",
+      "Problem solving",
+      "Pressure management",
+      "Teamwork"
+    ]
+  },
+  {
+    "id": 3,
+    "text": "Quality Assurance Engineer",
+    "skills": [
+      "Test automation",
+      "Requirement analysis",
+      "Manual testing",
+      "Problem solving",
+      "Communication",
+      "Pressure management",
+      "Teamwork"
+    ]
+  },
+  {
+    "id": 4,
+    "text": "Fullstack Engineer",
+    "skills": [
+      "Web development",
+      "Backend experience",
+      "Frontend experience",
+      "Javascript",
+      "PHP",
+      "React.js",
+      "Node.js",
+      "Leadership",
+      "Creativity",
+      "Problem solving",
+      "Pressure management",
+      "Teamwork"
+    ]
+  },
+  {
+    "id": 5,
+    "text": "Data Scientist",
+    "skills": [
+      "Machine learning",
+      "MATLAB",
+      "Python",
+      "SQL",
+      "Leadership",
+      "Problem solving",
+      "Pressure management",
+      "Teamwork"
+    ]
+  },
+  {
+    "id": 6,
+    "text": "DevOps Engineer",
+    "skills": [
+      "Source code management",
+      "Git",
+      "CI/CD",
+      "Jenkins",
+      "Docker",
+      "Kubernetes",
+      "Problem solving",
+      "Pressure management",
+      "Teamwork"
+    ]
+  },
+  {
+    "id": 7,
+    "text": "Backend Engineer",
+    "skills": [
+      "Python",
+      "Git",
+      "Cloud infrastructures",
+      "Databases",
+      "Communication",
+      "Problem solving",
+      "Pressure management",
+      "Teamwork"
+    ]
+  }
+]
