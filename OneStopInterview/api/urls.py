@@ -10,5 +10,6 @@ urlpatterns = [
     path('postsModify/<int:pk>', PostModify.as_view(), name='modifyPost'),
     path('userProgress/', UserProgress.as_view(), name='userProgress'),
     path('jobPostings/', JobPostings.as_view(), name='jobPostings'),
+    path('jobPostingsStatic/', JobPostingsStatic.as_view(), name='jobPostings'),
     path('questionCategories/', QuestionCategories.as_view(), name='questionCategories')
 ]

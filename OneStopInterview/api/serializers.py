@@ -44,9 +44,29 @@ class UserProgress(serializers.ModelSerializer):
 
 
 class JobPosting(serializers.Serializer): # noqa
+    """
+        Serializer for scraped job posting data from indeed
+    """
     title = serializers.CharField()
     job_url = serializers.CharField()
     company = serializers.CharField()
     location = serializers.CharField()
     posted_date = serializers.CharField()
     salary = serializers.CharField()
+
+
+class JobPostingStatic(serializers.ModelSerializer):
+    """
+        Serializer for Job Posting model (statically saved job postings)
+        ONLY USE AS CONTINGENCY PLAN
+    """
+    class Meta:
+        model = models.JobPosting
+        fields = ('title', 'job_url', 'company', 'location', 'posted_date', 'salary', 'time_stamp')
+        extra_kwargs = {'title': {'read_only': True},
+                        'job_url': {'read_only': True},
+                        'company': {'read_only': True},
+                        'location': {'read_only': True},
+                        'posted_date': {'read_only': True},
+                        'salary': {'read_only': True},
+                        'time_stamp': {'read_only': True}}
