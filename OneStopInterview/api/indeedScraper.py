@@ -33,7 +33,7 @@ def get_url(job_title, location, pagination_index):
            f"l={location.replace(' ', '+')}&start={pagination_index}"
 
 
-def extract_data(job_title, location, pagination_index):
+def extract_data(job_title, location, pagination_index=0):
     """
         Send request out to indeed, receive response then throw out
     """
@@ -68,11 +68,19 @@ def transform(soup):
         title = div.find('h2', class_='jobTitle').text.strip()
         # Generate URL
         job_url = "https://indeed.com" + div.h2.a.get('href')
-        company = div.find('span', class_='companyName').text.strip()
-        job_location = div.find('div', class_='companyLocation').text.strip()
-        # Extract unwanted posted tag
-        job_posting_date = div.find('span', class_='date').text.strip()\
-            .replace('Posted', '').replace('EmployerActive', '')
+        try:
+            company = div.find('span', class_='companyName').text.strip()
+        except AttributeError:
+            company = ''
+        try:
+            job_location = div.find('div', class_='companyLocation').text.strip()
+        except AttributeError:
+            job_location = ''
+        try:
+            job_posting_date = div.find('span', class_='date').text.strip()\
+                .replace('Posted', '').replace('EmployerActive', '')
+        except AttributeError:
+            job_posting_date = ''
         try:
             job_salary = div.find('span', class_='estimated-salary').text.strip()
         except AttributeError:

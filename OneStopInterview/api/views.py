@@ -7,6 +7,7 @@ from . import serializers
 from django.db.models import Q
 from django.apps import apps
 from . import indeedScraper
+from cloudscraper.exceptions import CloudflareChallengeError
 
 
 class PostList(generics.ListCreateAPIView):
@@ -181,10 +182,53 @@ class JobPostings(generics.ListAPIView):
             Return questions according to category defined in optional
             parameter. Default returns all questions
         """
-        job_title = self.request.data['job_title']
-        location = self.request.data['location']
 
-        job_list = indeedScraper.transform(indeedScraper.extract_data(job_title, location, 0))
+        # If job_title and location fields not provided, throw an error
+        try:
+            job_title = self.request.data['job_title']
+            location = self.request.data['location']
+        except KeyError:
+            raise ValidationError("Provide a non-empty 'job_title' and 'location' within body of request")
 
+        # If job_title and location fields are empty, throw an error
+        if job_title == '' or location == '':
+            raise ValidationError("Provide a non-empty 'job_title' and 'location' within body of request")
+
+        try:
+            job_list = indeedScraper.transform(indeedScraper.extract_data(job_title, location, 0))
+        except indeedScraper.UnableToFindJobDivs:
+            raise ValidationError("Indeed returned no results. Please enter a valid job title and \
+                    location")
+        except indeedScraper.RequestFailed:
+            raise ValidationError("Request to Indeed failed. Please try again")
+        except indeedScraper.DDosProtectionCloudFlare:
+            raise ValidationError("Ran into Cloudflare Security at Indeed. Please try again in a few moments")
+        except CloudflareChallengeError:
+            raise ValidationError("Ran into Cloudflare protection at Indeed. Please try again momentarily")
         # Return all jobs
         return job_list
+
+
+class JobPostingsStatic(generics.ListAPIView):
+    """
+        USE THIS VIEW ONLY AS WORST CASE SCENARIO
+    """
+    permission_classes = [AllowAny]
+    serializer_class = serializers.JobPostingStatic
+
+    def get_queryset(self):
+        """
+            Return questions according to category defined in optional
+            parameter. Default returns all questions
+        """
+        # If category parameter is given, filter based on category
+        if self.request.GET.get('job_title') and self.request.GET.get('location'):
+            jobs = models.JobPosting.objects.filter(job_title_category=self.request.GET.get('job_title'),
+                                                    location=self.request.GET.get('location'))
+            if not jobs:
+                raise ValidationError(detail='Job and Location combination doesn\'t exist')
+
+            return jobs
+
+        # Return all job postings
+        return models.JobPosting.objects.all()
