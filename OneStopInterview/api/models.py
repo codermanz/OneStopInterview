@@ -87,6 +87,8 @@ class JobPosting(models.Model):
     """
         Job Posting Model - contingency plan for hard coding job postings
     """
+    job_title_category = models.TextField()
+    location_category = models.TextField()
     title = models.TextField()
     job_url = models.TextField()
     company = models.TextField()

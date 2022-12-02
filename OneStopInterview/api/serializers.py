@@ -62,11 +62,14 @@ class JobPostingStatic(serializers.ModelSerializer):
     """
     class Meta:
         model = models.JobPosting
-        fields = ('title', 'job_url', 'company', 'location', 'posted_date', 'salary', 'time_stamp')
+        fields = ('title', 'job_url', 'company', 'location', 'posted_date', 'salary',
+                  'time_stamp', 'job_title_category', 'location_category')
         extra_kwargs = {'title': {'read_only': True},
                         'job_url': {'read_only': True},
                         'company': {'read_only': True},
                         'location': {'read_only': True},
                         'posted_date': {'read_only': True},
                         'salary': {'read_only': True},
-                        'time_stamp': {'read_only': True}}
+                        'time_stamp': {'read_only': True},
+                        'job_title_category': {'read_only': True},
+                        'location_category': {'read_only': True}}

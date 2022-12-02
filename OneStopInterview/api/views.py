@@ -215,4 +215,20 @@ class JobPostingsStatic(generics.ListAPIView):
     """
     permission_classes = [AllowAny]
     serializer_class = serializers.JobPostingStatic
-    queryset = models.JobPosting.objects.all()
+
+    def get_queryset(self):
+        """
+            Return questions according to category defined in optional
+            parameter. Default returns all questions
+        """
+        # If category parameter is given, filter based on category
+        if self.request.GET.get('job_title') and self.request.GET.get('location'):
+            jobs = models.JobPosting.objects.filter(job_title_category=self.request.GET.get('job_title'),
+                                                    location=self.request.GET.get('location'))
+            if not jobs:
+                raise ValidationError(detail='Job and Location combination doesn\'t exist')
+
+            return jobs
+
+        # Return all job postings
+        return models.JobPosting.objects.all()
