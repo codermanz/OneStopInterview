@@ -22,9 +22,9 @@ function InterviewPage(props) {
   const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
   const [questions, setQuestions] = useState();
+  const [progress, setProgress] = useState();
 
   const handleCheck = (e) => {
-    // TODO: Set loading after check
     const questionID = { question_id: e.target.value };
     axiosInstance
       .post(`/userProgress/`, questionID)
@@ -43,7 +43,9 @@ function InterviewPage(props) {
     axiosInstance
       .get(`/questionsBank/`)
       .then((res) => {
-        const result = res.data;
+        const result = res.data.filter(
+          (obj) => obj.question_category !== "roadmaps"
+        );
         setQuestions(result);
       })
       .catch((err) => {
@@ -51,7 +53,18 @@ function InterviewPage(props) {
         return Promise.resolve(errorBody);
       })
       .then(() => {
-        setLoading(false);
+        axiosInstance
+          .get(`/userProgress/`)
+          .then((res) => {
+            setProgress(res.data);
+          })
+          .catch((err) => {
+            let errorBody = err.response;
+            return Promise.resolve(errorBody);
+          })
+          .then(() => {
+            setLoading(false);
+          });
       });
   };
 
@@ -69,7 +82,6 @@ function InterviewPage(props) {
     return <Loader />;
   }
 
-  console.log(questions);
   return (
     <Box
       sx={{
@@ -103,34 +115,8 @@ function InterviewPage(props) {
               <strong style={{ color: "#C4DCFF" }}>interview</strong> taking
               skills with these selected questions.
             </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}>
-              <Typography variant="h5" sx={{ color: "white" }}>
-                Progress buttons
-              </Typography>
-              <Box sx={{ paddingY: "6px" }}>
-                <Button variant="contained" value="1" onClick={handleCheck}>
-                  Contains Duplicate
-                </Button>
-              </Box>
-              <Box sx={{ paddingY: "6px" }}>
-                <Button variant="contained" value="2" onClick={handleCheck}>
-                  Two Sum
-                </Button>
-              </Box>
-              <Box sx={{ paddingY: "6px" }}>
-                <Button variant="contained" value="3" onClick={handleCheck}>
-                  Best Time To Buy And Sell Stock
-                </Button>
-              </Box>
-            </Box>
             <ThemeProvider theme={theme}>
-              <div style={{ margin: "auto", padding: "20px", width: "80%" }}>
+              <div style={{ margin: "auto", padding: "20px", width: "100%" }}>
                 <Accordion
                   sx={{ padding: "10px" }}
                   expanded={expanded === "frontend-panel"}
@@ -144,10 +130,13 @@ function InterviewPage(props) {
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <TechnicalInterviewComponent />
+                    <TechnicalInterviewComponent
+                      questions={questions}
+                      progress={progress}
+                    />
                   </AccordionDetails>
                 </Accordion>
-
+                {/*
                 <Accordion
                   sx={{ padding: "10px" }}
                   expanded={expanded === "backend-panel"}
@@ -160,10 +149,11 @@ function InterviewPage(props) {
                       Behavioral Interview Questions
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
-                    <BehavioralInterviewComponent />
-                  </AccordionDetails>
+                    <AccordionDetails>
+                      <BehavioralInterviewComponent questions={questions} />
+                    </AccordionDetails>
                 </Accordion>
+                */}
               </div>
             </ThemeProvider>
           </div>

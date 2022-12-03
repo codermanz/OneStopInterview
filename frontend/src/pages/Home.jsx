@@ -9,7 +9,7 @@ import theme from "../themes/theme";
 function Home() {
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ minHeight: "100vh" }}>
+      <Box sx={{ minHeight: "100vh", overflowX: "hidden" }}>
         <Grid container>
           <Grid
             item

@@ -152,11 +152,9 @@ function Roadmap(props) {
         flexDirection: "row",
         alignItems: "flex-start",
         justifyContent: "flex-start",
-      }}
-    >
+      }}>
       <Box
-        sx={{ minHeight: "100vh", color: "white", backgroundColor: "#151517" }}
-      >
+        sx={{ minHeight: "100vh", color: "white", backgroundColor: "#151517" }}>
         <div style={{ padding: "60px", margin: "auto", width: "80%" }}>
           <Typography variant="h2" align="center" gutterBottom>
             Frontend and Backend Roadmap
@@ -166,8 +164,7 @@ function Roadmap(props) {
             variant="h5"
             align="center"
             gutterBottom
-            sx={{ marginBottom: "40px", color: "#4C94FF" }}
-          >
+            sx={{ marginBottom: "40px", color: "#4C94FF" }}>
             Not sure where to begin your programming journey? Check out our
             <strong style={{ color: "#C4DCFF" }}> roadmap </strong>below.
           </Typography>
@@ -177,13 +174,11 @@ function Roadmap(props) {
               <Accordion
                 sx={{ padding: "10px" }}
                 expanded={expanded === "frontend-panel"}
-                onChange={handleChange("frontend-panel")}
-              >
+                onChange={handleChange("frontend-panel")}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
-                  id="roadmap-accordion-frontend-panel"
-                >
+                  id="roadmap-accordion-frontend-panel">
                   <Typography variant="h5">Frontend Roadmap</Typography>
                 </AccordionSummary>
 
@@ -204,13 +199,11 @@ function Roadmap(props) {
               <Accordion
                 sx={{ padding: "10px" }}
                 expanded={expanded === "backend-panel"}
-                onChange={handleChange("backend-panel")}
-              >
+                onChange={handleChange("backend-panel")}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
-                  id="roadmap-accordion-backendend-panel"
-                >
+                  id="roadmap-accordion-backendend-panel">
                   <Typography variant="h5">Backend Roadmap</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
