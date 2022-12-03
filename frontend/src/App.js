@@ -67,9 +67,9 @@ function App() {
                   element={<InterviewPage state={appState} />}
                 />
                 <Route path="/forums" element={<Forums />} />
-                <Route path="/forums/postlist" element={<PostList />} />
-                <Route path="/forums/post" element={<Post />} />
-                <Route path="/forums/addpost" element={<AddPost />} />
+                <Route path="/forums/posts" element={<PostList state={appState} />} />
+                <Route path="/forums/posts/:id" element={<Post state={appState} />} />
+                <Route path="/forums/addpost" element={<AddPost state={appState} />} />
                 <Route path="/resume-tips" element={<ResumeTips />} />
                 <Route path="/resume-tips/checkpoints" element={<Checkpoints />} />
                 <Route path="/roadmap" element={<Roadmap state={appState} />} />
