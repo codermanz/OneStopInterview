@@ -30,7 +30,12 @@ ALLOWED_HOSTS = ['*']
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ORIGIN_ALLOW_ALL = True
-CSRF_TRUSTED_ORIGINS = ['https://onestopinterview.onrender.com']
+CSRF_TRUSTED_ORIGINS = [
+    'https://onestopinterview.onrender.com',
+    'https://willowy-cajeta-e6a338.netlify.app',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000'
+]
 
 # Application definition
 
@@ -45,15 +50,13 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'rest_framework',
     'users',
-    'rest_framework_simplejwt.token_blacklist',
-    'corsheaders'
+    'rest_framework_simplejwt.token_blacklist'
 ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
