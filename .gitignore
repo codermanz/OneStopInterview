@@ -3,7 +3,11 @@ env
 db.sqlite3
 OneStopInterview/api/migrations/*
 OneStopInterview/users/migrations/*
+OneStopInterview/api/migrations/
+OneStopInterview/users/migrations/
 .idea/
 .DS_Store
 scrapedJobDataFromIndeed/*
 scrapedJobDataFromIndeed
+__pycache__
+
