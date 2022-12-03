@@ -76,7 +76,9 @@ function Navbar(props) {
               <Button type="text">Jobs</Button>
             </Box>
             <Box>
-              <Button type="text">Forums</Button>
+              <Link to="/forums">
+                <Button type="text">Forums</Button>
+              </Link>
             </Box>
             <Box>
               <Link to="/roadmap">

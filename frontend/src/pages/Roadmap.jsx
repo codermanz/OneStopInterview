@@ -154,7 +154,14 @@ function Roadmap(props) {
         justifyContent: "flex-start",
       }}>
       <Box
-        sx={{ minHeight: "100vh", color: "white", backgroundColor: "#151517" }}>
+        sx={{
+          minHeight: "100vh",
+          justifyContent: "center",
+          width: "100%",
+          color: "white",
+          backgroundColor: "#151517",
+        }}
+      >
         <div style={{ padding: "60px", margin: "auto", width: "80%" }}>
           <Typography variant="h2" align="center" gutterBottom>
             Frontend and Backend Roadmap
