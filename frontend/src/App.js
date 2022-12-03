@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
   Home,
@@ -6,26 +6,79 @@ import {
   Login,
   ResumeTips,
   Roadmap,
+  Registration,
   Checkpoints,
+  Error,
 } from "./pages";
-import { Navbar } from "./components";
+import Forums from "./pages/Forums";
+import PostList from "./pages/PostList";
+import Post from "./pages/Post";
+import AddPost from "./pages/AddPost";
+import { Navbar, Logout, Loader } from "./components";
 import CssBaseline from "@mui/material/CssBaseline";
+import axiosInstance from "./axios";
 
 function App() {
+  const [appState, setAppState] = useState({
+    username: null,
+    progress: null,
+  });
+  const [loading, setLoading] = useState(true);
+
+  const getUserInfo = () => {
+    axiosInstance
+      .get(`/user/userInfo/`)
+      .then((res) => {
+        const result = res.data;
+        setAppState({
+          username: result.user_name,
+          progress: result.progress_percentage,
+        });
+      })
+      .catch((err) => {
+        let errorBody = err.response;
+        return Promise.resolve(errorBody);
+      })
+      .then(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
   return (
     <>
       <CssBaseline />
       <Router>
         <div className="bg-dark-bg">
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/interview" element={<InterviewPage />} />
-            <Route path="/resume-tips" element={<ResumeTips />} />
-            <Route path="/roadmap" element={<Roadmap />} />
-            <Route path="/resume-tips/checkpoints" element={<Checkpoints />} />
-          </Routes>
+          {loading ? (
+            <Loader />
+          ) : (
+            <>
+              <Navbar state={appState} />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route
+                  path="/login"
+                  element={<Login setState={setAppState} />}
+                />
+                <Route
+                  path="/interview"
+                  element={<InterviewPage state={appState} />}
+                />
+                <Route path="/forums" element={<Forums />} />
+                <Route path="/forums/postlist" element={<PostList />} />
+                <Route path="/forums/post" element={<Post />} />
+                <Route path="/forums/addpost" element={<AddPost />} />
+                <Route path="/resume-tips" element={<ResumeTips />} />
+                <Route path="/resume-tips/checkpoints" element={<Checkpoints />} />
+                <Route path="/roadmap" element={<Roadmap state={appState} />} />
+                <Route path="/register" element={<Registration />} />
+                <Route path="/logout" element={<Logout setState={setAppState} />} />
+                <Route path="*" element={<Error />} />
+              </Routes>
+            </>
+          )}
         </div>
       </Router>
     </>

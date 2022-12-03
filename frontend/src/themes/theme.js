@@ -1,7 +1,7 @@
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
-  typography: {
+  Typography: {
     color: "#FFFFF",
   },
   common: {
@@ -10,12 +10,20 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: "#4C94FF",
+      main: "#FFFFF",
       light: "#C4DCFF",
     },
+    neutral: {
+      main: "#64748B",
+      contrastText: "#fff",
+    },
+    mode: "dark",
   },
-  button: {
+  Button: {
     textTransform: "none",
+  },
+  TextField: {
+    color: "#FFFFF",
   },
 });
 

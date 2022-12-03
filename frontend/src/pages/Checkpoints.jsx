@@ -1,13 +1,12 @@
 import React from "react";
 import { useState } from "react";
-import Checkbox from "@mui/material/Checkbox";
 import checkpointList from "../components/Joblist-components/ListData.json";
-import { Typography, createTheme } from "@mui/material";
+import { Typography } from "@mui/material";
 
 export default function IndeterminateCheckbox() {
   const [checked, setChecked] = useState(false);
 
-  const handleChekced = (e) => {
+  const handleChecked = (e) => {
     setChecked(!checked);
   };
 

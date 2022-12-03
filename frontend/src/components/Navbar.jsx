@@ -1,9 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import { Box, Typography, Button } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Avatar from "@mui/material/Avatar";
 const theme = createTheme({
   typography: {
     button: {
@@ -13,7 +12,11 @@ const theme = createTheme({
   },
 });
 
-function Navbar() {
+function Navbar(props) {
+  const handleLogout = () => {
+    props.onLoadingChange(!props.state.loading);
+  };
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -22,13 +25,14 @@ function Navbar() {
             color: "white",
             top: "0px",
             position: "sticky",
-            zIndex: 999,
+            zIndex: 10,
             height: "74px",
             borderBottomWidth: "1px",
             borderColor: "rgb(203 213 225 / 0.1)",
             backdropFilter: "blur(20px)",
             display: "flex",
             alignItems: "center",
+            overflow: "hidden",
           }}>
           <Box px={6}>
             <Link
@@ -72,7 +76,9 @@ function Navbar() {
               <Button type="text">Jobs</Button>
             </Box>
             <Box>
-              <Button type="text">Forums</Button>
+              <Link to="/forums">
+                <Button type="text">Forums</Button>
+              </Link>
             </Box>
             <Box>
               <Link to="/roadmap">
@@ -88,12 +94,39 @@ function Navbar() {
               flexGrow: "1",
             }}
             mr={5}>
-            <Link to="/login">
-              <Typography sx={{ fontSize: "18px" }} pr={4}>
-                Login/Signup
-              </Typography>
-            </Link>
-            <Avatar />
+            <Box
+              pr={3}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}>
+              {props.state.username ? (
+                <>
+                  <Box px={3}>
+                    <Typography variant="h5">{props.state.username}</Typography>
+                  </Box>
+                  <Button
+                    type="button"
+                    sx={{ color: "white" }}
+                    variant="outlined"
+                    component={NavLink}
+                    to="/logout"
+                    onClick={handleLogout}>
+                    Log Out
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  type="button"
+                  sx={{ color: "white" }}
+                  variant="outlined"
+                  component={NavLink}
+                  to="/login">
+                  Log In
+                </Button>
+              )}
+            </Box>
           </Box>
         </Box>
       </ThemeProvider>
