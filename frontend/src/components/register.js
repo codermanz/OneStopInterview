@@ -5,16 +5,13 @@ import {
   Avatar,
   Button,
   Box,
-  Checkbox,
   CssBaseline,
-  FormControlLabel,
   TextField,
   Grid,
-  Paper,
   Typography,
   Container,
 } from "@mui/material";
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../themes/theme";
 
@@ -40,20 +37,16 @@ export default function SignUp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
-
     axiosInstance
       .post(`/user/register/`, {
         email: formData.email,
         user_name: formData.username,
-        first_name: formData.firstname,
-        last_name: formData.lastname,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
         password: formData.password,
       })
       .then((res) => {
         navigate("/login");
-        console.log(res);
-        console.log(res.data);
       })
       .catch((err) => {
         let errorBody = err.response;
@@ -68,18 +61,21 @@ export default function SignUp() {
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}>
           <Avatar sx={{ m: 1, bgcolor: "rgba(51,102,204)" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -143,14 +139,13 @@ export default function SignUp() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ 
-                mt: 3, 
+              sx={{
+                mt: 3,
                 mb: 2,
                 bgcolor: "rgba(51,102,204)",
                 borderRadius: "12px",
-               }}
-              onClick={handleSubmit}
-            >
+              }}
+              onClick={handleSubmit}>
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">

@@ -10,4 +10,7 @@ OneStopInterview/users/migrations/
 scrapedJobDataFromIndeed/*
 scrapedJobDataFromIndeed
 __pycache__
+OneStopInterview/api/__pycache__
+OneStopInterview/OneStopInterview/__pycache__
+
 

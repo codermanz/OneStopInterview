@@ -32,6 +32,7 @@ function Navbar(props) {
             backdropFilter: "blur(20px)",
             display: "flex",
             alignItems: "center",
+            overflow: "hidden",
           }}>
           <Box px={6}>
             <Link
