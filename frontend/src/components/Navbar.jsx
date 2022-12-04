@@ -73,7 +73,9 @@ function Navbar(props) {
               </Link>
             </Box>
             <Box>
+              <Link to="/jobs">
               <Button type="text">Jobs</Button>
+              </Link>
             </Box>
             <Box>
               <Link to="/forums">

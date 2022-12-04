@@ -10,6 +10,7 @@ import {
   Checkpoints,
   Error,
 } from "./pages";
+import Jobs from "./pages/Jobs"
 import Forums from "./pages/Forums";
 import PostList from "./pages/PostList";
 import Post from "./pages/Post";
@@ -72,6 +73,7 @@ function App() {
                 <Route path="/forums/addpost" element={<AddPost state={appState} />} />
                 <Route path="/resume-tips" element={<ResumeTips />} />
                 <Route path="/resume-tips/checkpoints" element={<Checkpoints />} />
+                <Route path="/jobs" element={<Jobs state={appState}/>}/>
                 <Route path="/roadmap" element={<Roadmap state={appState} />} />
                 <Route path="/register" element={<Registration />} />
                 <Route path="/logout" element={<Logout setState={setAppState} />} />
