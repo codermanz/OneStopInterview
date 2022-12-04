@@ -5,9 +5,7 @@ import {
   AccordionDetails,
   Typography,
   ThemeProvider,
-  createTheme,
   Box,
-  Button,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TechnicalInterviewComponent from "../components/interview-components/TechnicalInterviewComponent";
@@ -23,17 +21,8 @@ function InterviewPage(props) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [questions, setQuestions] = useState();
   const [progress, setProgress] = useState();
-
-  const handleCheck = (e) => {
-    const questionID = { question_id: e.target.value };
-    axiosInstance
-      .post(`/userProgress/`, questionID)
-      .then((res) => {})
-      .catch((err) => {
-        let errorBody = err.response;
-        return Promise.resolve(errorBody);
-      });
-  };
+  const [progressPercentage, setProgressPercentage] = useState(null);
+  const [checkedQuestions, setCheckedQuestions] = useState(new Map());
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -68,11 +57,27 @@ function InterviewPage(props) {
       });
   };
 
+  const getUserProgress = async () => {
+    axiosInstance
+      .get(`/user/userInfo/`)
+      .then((res) => {
+        const result = res.data;
+        setProgressPercentage(result.progress_percentage);
+      })
+      .catch((err) => {
+        let errorBody = err.response;
+        return Promise.resolve(errorBody);
+      });
+  };
+
   useEffect(() => {
     if (props.state.progress != null) {
       setLoggedIn(true);
+      if (progressPercentage == null) {
+        setProgressPercentage(props.state.progress);
+      }
     }
-  }, [props.state]);
+  }, [props.state, progressPercentage]);
 
   useEffect(() => {
     getQuestions();
@@ -90,8 +95,8 @@ function InterviewPage(props) {
         alignItems: "flex-start",
         justifyContent: "flex-start",
       }}>
-      {props.state.progress != null ? (
-        <Sidebar progress={props.state.progress} />
+      {props.state.progress != null && progressPercentage != null ? (
+        <Sidebar progress={progressPercentage} />
       ) : null}
       <Box
         sx={{
@@ -133,6 +138,9 @@ function InterviewPage(props) {
                     <TechnicalInterviewComponent
                       questions={questions}
                       progress={progress}
+                      checkedQuestions={checkedQuestions}
+                      setCheckedQuestions={setCheckedQuestions}
+                      getProgress={getUserProgress}
                     />
                   </AccordionDetails>
                 </Accordion>
