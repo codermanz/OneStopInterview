@@ -6,12 +6,16 @@ class PostSerializer(serializers.ModelSerializer):
     """
         Serializer for Post class
     """
+    # Adds additional field of username to payload for posts
+    author_username = serializers.CharField(source="author.user_name",
+                                            read_only=True)
 
     class Meta:
         model = models.Post
-        fields = ('id', 'title', 'body', 'parent_post', 'author', 'time_stamp')
+        fields = ('id', 'title', 'body', 'parent_post', 'author', 'time_stamp', 'author_username')
         extra_kwargs = {'id': {'read_only': True},
-                        'author': {'read_only': True}}
+                        'author': {'read_only': True},
+                        'author_username': {'read_only': True}}
 
 
 class QuestionCategorySerializer(serializers.ModelSerializer):

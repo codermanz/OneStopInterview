@@ -2,12 +2,16 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import SAFE_METHODS, BasePermission, IsAuthenticated, AllowAny, \
     IsAuthenticatedOrReadOnly
 from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 from . import models
 from . import serializers
 from django.db.models import Q
 from django.apps import apps
 from . import indeedScraper
 from cloudscraper.exceptions import CloudflareChallengeError
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
 
 
 class PostList(generics.ListCreateAPIView):
@@ -17,7 +21,7 @@ class PostList(generics.ListCreateAPIView):
             - /posts
    """
     permission_classes = [IsAuthenticatedOrReadOnly]
-    queryset = models.Post.objects.all()
+    queryset = models.Post.objects.select_related('author')
     serializer_class = serializers.PostSerializer
 
     def perform_create(self, serializer):
@@ -41,6 +45,7 @@ class PostList(generics.ListCreateAPIView):
                     if parent_object.parent_post_id is not None:
                         raise ValidationError('Can\'t respond to a response')
         except KeyError:
+            logging.info("No parent_post_id provided - setting to root node")
             pass
 
         # Automatically set the author of a post to the user that sent the request
@@ -93,7 +98,7 @@ class PostDetail(generics.ListAPIView):
             its children posts
         """
         posts = self.kwargs.get('pk')  # Get pk from url path
-        return models.Post.objects.filter(Q(parent_post_id=posts) | Q(id=posts))
+        return models.Post.objects.filter(Q(parent_post_id=posts) | Q(id=posts)).select_related('author')
 
 
 class GetQuestions(generics.ListAPIView):
@@ -116,6 +121,7 @@ class GetQuestions(generics.ListAPIView):
                 # Check to see if category exists
                 category = models.QuestionCategory.objects.get(name=self.request.GET.get('category'))
             except models.QuestionCategory.DoesNotExist:
+                logging.info(f"Category {self.request.GET.get('category')} doesn't exist")
                 raise ValidationError(detail='Category doesn\'t exist')
             return models.TechBehQuestion.objects.filter(question_category=category)
         # Return all questions
@@ -140,6 +146,8 @@ class UserProgress(generics.ListCreateAPIView):
         questions_done_by_user = models.UserProgress.objects.filter(user_id=self.request.user.id)
         if questions_done_by_user.filter(question_id=self.request.data['question_id']). \
                 exists():
+            logging.warning(f"Question {self.request.data['question_id']} for user"
+                            f"{self.request.user.id} already marked completed")
             raise ValidationError('Already marked question as completed')
         # Update user progress
         model = apps.get_model('users', 'User')
@@ -174,7 +182,7 @@ class JobPostings(generics.ListAPIView):
         API endpoints that use this view:
             - /jobPostings
     """
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = serializers.JobPosting
 
     def get_queryset(self):
@@ -188,25 +196,40 @@ class JobPostings(generics.ListAPIView):
             job_title = self.request.data['job_title']
             location = self.request.data['location']
         except KeyError:
+            logging.error("No job_title and location provided in body of request")
             raise ValidationError("Provide a non-empty 'job_title' and 'location' within body of request")
 
         # If job_title and location fields are empty, throw an error
         if job_title == '' or location == '':
+            logging.error("Empty job_title or empty location provided in body of request")
             raise ValidationError("Provide a non-empty 'job_title' and 'location' within body of request")
 
         try:
             job_list = indeedScraper.transform(indeedScraper.extract_data(job_title, location, 0))
         except indeedScraper.UnableToFindJobDivs:
+            logging.error(f"Indeed returned no results for {job_title} at {location}")
             raise ValidationError("Indeed returned no results. Please enter a valid job title and \
                     location")
         except indeedScraper.RequestFailed:
+            logging.error(f"Request to indeed failed for {job_title} at {location}")
             raise ValidationError("Request to Indeed failed. Please try again")
         except indeedScraper.DDosProtectionCloudFlare:
+            logging.error(f"Failed scraping due to cloud flare security for {job_title} at {location}")
             raise ValidationError("Ran into Cloudflare Security at Indeed. Please try again in a few moments")
         except CloudflareChallengeError:
+            logging.error(f"Failed scraping due to level 2 cloud flare security for {job_title} at {location}")
             raise ValidationError("Ran into Cloudflare protection at Indeed. Please try again momentarily")
         # Return all jobs
         return job_list
+
+
+# class StandardResultsSetPagination(PageNumberPagination):
+#     """
+#         Pagination class
+#     """
+#     page_size = 100
+#     page_size_query_param = 'page_size'
+#     max_page_size = 200
 
 
 class JobPostingsStatic(generics.ListAPIView):
@@ -215,6 +238,7 @@ class JobPostingsStatic(generics.ListAPIView):
     """
     permission_classes = [AllowAny]
     serializer_class = serializers.JobPostingStatic
+    # pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         """
@@ -227,6 +251,20 @@ class JobPostingsStatic(generics.ListAPIView):
                                                     location=self.request.GET.get('location'))
             if not jobs:
                 raise ValidationError(detail='Job and Location combination doesn\'t exist')
+
+            return jobs
+        # Only job title
+        if self.request.GET.get('job_title'):
+            jobs = models.JobPosting.objects.filter(job_title_category=self.request.GET.get('job_title'))
+            if not jobs:
+                raise ValidationError(detail='Job title doesn\'t exist')
+
+            return jobs
+        # Location
+        if self.request.GET.get('location'):
+            jobs = models.JobPosting.objects.filter(location=self.request.GET.get('location'))
+            if not jobs:
+                raise ValidationError(detail='Location combination doesn\'t exist')
 
             return jobs
 

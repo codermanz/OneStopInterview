@@ -41,8 +41,6 @@ function TechnicalInterviewComponent(props) {
     ? Object.entries(sortQuestions(props.questions))
     : null;
 
-  const [checkedQuestions, setCheckedQuestions] = useState(new Map());
-
   const completedQuestions = props.progress
     ? props.progress.map((item) => item.question_id)
     : [];
@@ -63,12 +61,14 @@ function TechnicalInterviewComponent(props) {
           if (tempMap.has(q)) tempMap.set(q, true);
         });
       }
-      setCheckedQuestions(tempMap);
+      props.setCheckedQuestions(tempMap);
     }
   }, []);
 
   const handleCheck = (e) => {
-    setCheckedQuestions(checkedQuestions.set(e.target.value, true));
+    let temp = props.checkedQuestions;
+    temp.set(e.target.value, true);
+    props.setCheckedQuestions(temp);
     e.currentTarget.disabled = true;
     const questionID = { question_id: e.target.value };
     axiosInstance
@@ -77,12 +77,13 @@ function TechnicalInterviewComponent(props) {
       .catch((err) => {
         let errorBody = err.response;
         return Promise.resolve(errorBody);
-      });
+      })
+      .then(() => props.getProgress());
   };
 
   return (
     <div>
-      {questions && completedQuestions && checkedQuestions.size !== 0 ? (
+      {questions && completedQuestions && props.checkedQuestions.size !== 0 ? (
         questions.map((value, index) => {
           return (
             <Box key={index}>
@@ -109,9 +110,12 @@ function TechnicalInterviewComponent(props) {
                         }}>
                         <TableCell component="th" scope="row">
                           <Checkbox
-                            defaultChecked={checkedQuestions.get(question.id)}
+                            defaultChecked={props.checkedQuestions.get(
+                              question.id
+                            )}
                             onChange={handleCheck}
                             value={question.id}
+                            disabled={props.checkedQuestions.get(question.id)}
                           />
                         </TableCell>
                         <TableCell align="left">
