@@ -97,13 +97,3 @@ def transform(soup):
         joblist.append(job)
 
     return joblist
-
-# Stand-alone script testing
-# if __name__ == '__main__':
-#     # Sample run
-#     html_data = extract_data("python developer", "Atlanta GA", 50)
-#     job_list = transform(html_data)
-#     for item in job_list:
-#         # Print for testing purposes
-#         print(item['title'] + " @ " + item['company'] + " URL: " + item['job_url'] + " @ " + item['location'] +
-#               " that pays: " + item['salary'] + " - Posted: " + item['posted_date'])
