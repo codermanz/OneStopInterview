@@ -2,6 +2,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import SAFE_METHODS, BasePermission, IsAuthenticated, AllowAny, \
     IsAuthenticatedOrReadOnly
 from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 from . import models
 from . import serializers
 from django.db.models import Q
@@ -222,12 +223,22 @@ class JobPostings(generics.ListAPIView):
         return job_list
 
 
+# class StandardResultsSetPagination(PageNumberPagination):
+#     """
+#         Pagination class
+#     """
+#     page_size = 100
+#     page_size_query_param = 'page_size'
+#     max_page_size = 200
+
+
 class JobPostingsStatic(generics.ListAPIView):
     """
         USE THIS VIEW ONLY AS WORST CASE SCENARIO
     """
     permission_classes = [AllowAny]
     serializer_class = serializers.JobPostingStatic
+    # pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         """
@@ -240,6 +251,20 @@ class JobPostingsStatic(generics.ListAPIView):
                                                     location=self.request.GET.get('location'))
             if not jobs:
                 raise ValidationError(detail='Job and Location combination doesn\'t exist')
+
+            return jobs
+        # Only job title
+        if self.request.GET.get('job_title'):
+            jobs = models.JobPosting.objects.filter(job_title_category=self.request.GET.get('job_title'))
+            if not jobs:
+                raise ValidationError(detail='Job title doesn\'t exist')
+
+            return jobs
+        # Location
+        if self.request.GET.get('location'):
+            jobs = models.JobPosting.objects.filter(location=self.request.GET.get('location'))
+            if not jobs:
+                raise ValidationError(detail='Location combination doesn\'t exist')
 
             return jobs
 
