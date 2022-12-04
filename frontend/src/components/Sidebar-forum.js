@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { React, useState, useEffect } from 'react';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -15,20 +15,16 @@ import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 const categories = [
   {
     id: 'MENU',
-    children: [
-      {
-        id: 'View Posts',
-        icon: <ListIcon />,
-        active: true,
-      },
-      { id: 'Create Post', icon: <CreateIcon />, moveTo: '/forums/addpost/' },
+    menus: [
+      { cid: '1', text: 'View Posts', icon: <ListIcon />, moveTo: '/forums/posts/' },
+      { cid: '2', text: 'Create Post', icon: <CreateIcon />, moveTo: '/forums/addpost/' },
     ],
   },
   {
     id: 'PERSONAL NAVIGATOR',
-    children: [
-      { id: 'My Questions', icon: <HelpIcon /> },
-      { id: 'My Answers', icon: <QuestionAnswerIcon /> },
+    menus: [
+      { cid: '3', text: 'My Questions', icon: <HelpIcon /> },
+      { cid: '4', text: 'My Answers', icon: <QuestionAnswerIcon /> },
     ],
   },
 ];
@@ -40,25 +36,36 @@ const item = {
   '&:hover, &:focus': {
     bgcolor: 'rgba(255, 255, 255, 0.08)',
   },
+  "&$selected": {
+    backgroundColor: "red",
+  },
 };
 
 
 export default function Navigator(props) {
   const { ...other } = props;
 
+  const [selectedIndex, setSelectedIndex] = useState(1);
+
+  const handleListItemClick = (event, index) => {
+    setSelectedIndex(index);
+  };
+
   return (
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
-        {categories.map(({ id, children }) => (
-          <Box key={id} sx={{ bgcolor: '#101F33' }}>
-            <ListItem sx={{ py: 2, px: 3 }}>
+        {categories.map(({id, menus}) => (
+          <Box sx={{ bgcolor: '#101F33' }}>
+            <ListItem key={id} sx={{ py: 2, px: 3 }}>
               <ListItemText sx={{ color: '#fff' }}>{id}</ListItemText>
             </ListItem>
-            {children.map(({ id: childId, icon, active, moveTo }) => (
-              <ListItem disablePadding key={childId}>
-                <ListItemButton selected={active} sx={item} to={moveTo}>
+            {menus.map(({ cid, text, icon, active, moveTo }) => (
+              <ListItem disablePadding key={cid} 
+                        selected={selectedIndex === {cid}} 
+                        onClick={(event) => handleListItemClick(event, cid)}>
+                <ListItemButton sx={item} to={moveTo} >
                   <ListItemIcon>{icon}</ListItemIcon>
-                  <ListItemText>{childId}</ListItemText>
+                  <ListItemText>{text}</ListItemText>
                 </ListItemButton>
               </ListItem>
             ))}

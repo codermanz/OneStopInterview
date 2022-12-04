@@ -58,6 +58,16 @@ const renderPost = (post) => {
 }
 
 export default function Content() {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [postId, setPostId] = useState("");
+  const [authorId, setAuthorId] = useState("");
+  const [parentPostId, setParentPostId] = useState("");
+  const [time, setTime] = useState("");
+
+
+
+  /*
   const [posts, setPosts] = useState([
     {author: "Bea",
       title: "This is Title Test1",
@@ -68,35 +78,37 @@ export default function Content() {
       body: "Test body",
       time: "11/30/2022"}
   ]);
+  */
+  const [posts, setPosts] = useState([]);
 
-        /*
-  const getPosts = async () => {
+  axios ({
+    method: "get",
+    url: baseURL + "/posts/",
+  })
+    .then(function (response) {
+      response.data.results.forEach(post=> {
+        setPosts(posts => [...posts, post]);
+      });
+    })
+    .catch(function (response) {
+      console.error(response);
+  });
+
     axios ({
       method: "get",
-      url: baseURL+"/posts/",
+      url: baseURL + "/posts/",
     })
-      .then(function (res) {
-        console.log("Trying to get posts.");
-        const result = res.data;
-        console.log(result);
-        setPosts(result);
-      
-        response.data.results.forEach(result=> {
-          if (result.user.email == email) {
-            setPosts(posts => [...posts, result]);
-          }
-        });
-      })
-      .catch(function (res) {
-        console.error(res);
-    });
-  }
-   
-  useEffect(() => {
-    getPosts();
-  }, []);
+      .then(function (response) {
+        console.log(response);
 
-        */
+      })
+      .catch(function (response) {
+        console.error(response);
+        const post = {author: response.data.author, }
+
+      });
+   
+
 
   return (
     <main>
