@@ -100,7 +100,7 @@ function RenderPost(post) {
                     <Avatar {...(post.author[0])} />
                 </Grid>
                 <Grid item xs sx= {{ flexDirection: "column", display: "flex", paddingInline: '10px' }}>
-                    <Typography variant="subtitle1" >{post.author}</Typography>
+                    <Typography variant="subtitle1" >{post.author_username}</Typography>
                     <Typography variant="body2">{post.time}</Typography>
                 </Grid>
             </Grid>

@@ -79,7 +79,7 @@ theme = {
 };
 
 function RenderPost(post, props, navigate) {
-//  const isUserAuthor = (post.author==props.state.username) ? "visible" : "hidden";
+  const isUserAuthor = (post.author_username==props.state.username) ? "visible" : "hidden";
 
   const savedTime = post.time_stamp;
   const formatedDate = new Date(savedTime).toLocaleString(
@@ -117,7 +117,7 @@ function RenderPost(post, props, navigate) {
               <Avatar {...(post.author[0])} />
               </Grid>
               <Grid item xs sx= {{ flexDirection: "column", display: "flex" }}>
-              <Typography variant="subtitle1" >{post.author}</Typography>
+              <Typography variant="subtitle1" >{post.author_username}</Typography>
               <Typography variant="body2">{formatedDate}</Typography>
               </Grid>
           </Grid>
@@ -130,9 +130,9 @@ function RenderPost(post, props, navigate) {
             </Typography>
           </CardContent>
           <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button size="large" style={{visibility : isUserAuthor}} >Edit</Button>
+            <Button size="large" style={{visibility : isUserAuthor}} >Delete</Button>
             <Button size="large" onClick={(e)=> ViewPost(post)}>View</Button>
-            <Button size="large" style={{visibility : true}} >Edit</Button>
-            <Button size="large" style={{visibility : true}} >Delete</Button>
           </CardActions>
         </Box> 
       </Grid>
