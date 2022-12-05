@@ -26,12 +26,16 @@ SECRET_KEY = 'django-insecure-yo81-otn&qd5mp-bk6&w#q^gi02=zk6qdt2&qfma%(@r*l_&s4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
 ALLOWED_HOSTS = ['*']
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ORIGIN_ALLOW_ALL = True
-CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000/"]
+CSRF_TRUSTED_ORIGINS = [
+    'https://onestopinterview.onrender.com',
+    'https://willowy-cajeta-e6a338.netlify.app',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000'
+]
 
 # Application definition
 
@@ -86,8 +90,12 @@ WSGI_APPLICATION = 'OneStopInterview.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'onestopinterview_xt1f',
+        'USER': 'onestopinterview',
+        'PASSWORD': 'SdspQQJLX4E3LhmjWbicgOSwzE3t2pQ7',
+        'HOST': 'dpg-cdfepepgp3juhhv14uug-a.oregon-postgres.render.com',
+        'PORT': '5432',
     }
 }
 
@@ -139,12 +147,16 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': 20
 }
 
 AUTH_USER_MODEL = 'users.User'
 
 CORS_ALLOWED_ORIGINS = [
+    "https://onestopinterview.onrender.com",
+    "https://willowy-cajeta-e6a338.netlify.app",
     "http://127.0.0.1:3000",
     "http://localhost:3000"
 ]

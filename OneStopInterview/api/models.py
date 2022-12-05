@@ -81,3 +81,23 @@ class UserProgress(models.Model):
 
     def __str__(self):
         return f"User ID: {self.user_id}, Question ID: {self.question_id}"
+
+
+class JobPosting(models.Model):
+    """
+        Job Posting Model - contingency plan for hard coding job postings
+    """
+    job_title_category = models.TextField()
+    location_category = models.TextField()
+    title = models.TextField()
+    job_url = models.TextField()
+    company = models.TextField()
+    location = models.TextField()
+    posted_date = models.TextField()
+    salary = models.TextField()
+    time_stamp = models.DateTimeField(default=timezone.now)
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return f"Title: {self.title} at: {self.company} located in: {self.location}"
