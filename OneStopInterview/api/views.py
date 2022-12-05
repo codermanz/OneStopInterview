@@ -248,7 +248,7 @@ class JobPostingsStatic(generics.ListAPIView):
         # If category parameter is given, filter based on category
         if self.request.GET.get('job_title') and self.request.GET.get('location'):
             jobs = models.JobPosting.objects.filter(job_title_category=self.request.GET.get('job_title'),
-                                                    location=self.request.GET.get('location'))
+                                                    location_category=self.request.GET.get('location'))
             if not jobs:
                 raise ValidationError(detail='Job and Location combination doesn\'t exist')
 
@@ -262,7 +262,7 @@ class JobPostingsStatic(generics.ListAPIView):
             return jobs
         # Location
         if self.request.GET.get('location'):
-            jobs = models.JobPosting.objects.filter(location=self.request.GET.get('location'))
+            jobs = models.JobPosting.objects.filter(location_category=self.request.GET.get('location'))
             if not jobs:
                 raise ValidationError(detail='Location combination doesn\'t exist')
 
