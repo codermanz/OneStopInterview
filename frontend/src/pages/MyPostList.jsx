@@ -154,7 +154,7 @@ function RenderPost(post, props, navigate) {
   return (
     <>
       <Grid item key={post.id} xs={10} sm={10} md={10} 
-            sx={{position: 'flex', display: 'flex', flexDirection: 'column', alignItems: 'center'  }} >
+            sx={{position: 'flex', display: 'flex', flexDirection: 'column', alignItems: 'center' }} >
         <Box sx={{ 
           width: "80%",
           height: "100%",
@@ -206,7 +206,9 @@ export default function PostList(props) {
       })
         .then(function (response) {
           response.data.forEach(post=> {
-            setPosts(posts => [...posts, post]);
+            if (post.author_username == props.state.username) {
+                setPosts(posts => [...posts, post]);
+            }
           });
         })
         .catch(function (response) {
