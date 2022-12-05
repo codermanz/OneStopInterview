@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  Button,
-} from "@mui/material";
-import axiosInstance from "../axios";
-import JobSearchDropdowns from "../components/jobs-components/JobSearchDropdowns";
+import { Box, Typography, Button } from "@mui/material";
+import JobSearchDropdownsAndResults from "../components/jobs-components/JobSearchDropdownsAndResults";
 
 function Jobs(props) {
   const [isUserLoggedIn, setUserLoggedIn] = useState(props.state.username);
-  
+
   const jobTitleCategories = [
     { category: "Network and Systems Administrator" },
     { category: "Computer Support Specialist" },
@@ -54,11 +49,10 @@ function Jobs(props) {
     { category: "Chicago IL" },
     { category: "Raleigh NC" },
   ];
-  
+
   useEffect(() => {
     setUserLoggedIn(props.state.username);
   }, [props.state.username]);
-
 
   return (
     <Box
@@ -102,7 +96,7 @@ function Jobs(props) {
               justify-content="center"
             >
               {isUserLoggedIn ? (
-                <JobSearchDropdowns
+                <JobSearchDropdownsAndResults
                   jobTitleCategories={jobTitleCategories}
                   locationCategories={locationCategories}
                 />
