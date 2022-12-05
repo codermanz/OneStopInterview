@@ -1,99 +1,136 @@
 import React from "react";
-import {
-  Box,
-  Grid,
-  Typography,
-  Link,
-} from "@mui/material";
-import Avatar from "@mui/material/Avatar";
+import { Button, Box, Grid, Typography } from "@mui/material";
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
+import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 
-function JobPostingComponent() {
+function JobPostingComponent(props) {
   return (
-    <Grid
-      item
-      xs={12}
-      sm={12}
-      md={12}
+    <Button
+      href={props.job_url}
+      target="_blank"
       sx={{
-        position: "flex",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+        margin: "5px",
+        textTransform: "none",
+        width: "100%",
+        height: "100%",
+        backgroundColor: "#101F33",
+        border: "1px solid silver",
+        borderRadius: "12px",
+        paddingLeft: "30px",
       }}
     >
-      <Box
-        sx={{
-          width: "1200px",
-          height: "100%",
-          backgroundColor: "#101F33",
-          color: "white",
-          border: "1px solid white",
-          borderRadius: "12px",
-          paddingLeft: "30px",
-        }}
-      >
-        <Grid container spacing={2} alignItems="center" paddingTop={3} paddingLeft={3} paddingRight={3}>
-          <Grid item xs={1}>
-            <Avatar src ="https://drive.google.com/file/d/17rd9-ssPcqNO1fas0g5Wmr0Zteylhx6w/view?usp=sharing" variant="rounded" sx={{ width: 56, height: 56 }}>
-            </Avatar>
-          </Grid>
-          <Grid item xs={11} sx={{ flexDirection: "column", display: "flex" }}>
-            <Typography variant="h6" sx={{ color: "#40577D" }}>
-              Atlassian
-            </Typography>
-            <Typography variant="h5" sx={{ color: "#F8FAFC" }}><Link sx={{ color: "#F8FAFC" }} target="_blank"
-              href="https://www.codecademy.com/learn/learn-node-js">Product Designer</Link></Typography>
-          </Grid>
-
-          <Grid
-            item
-            xs={12}
-            sx={{ alignItems: "center", flexDirection: "row", display: "flex" }}
-          >
-            <PlaceOutlinedIcon fontSize="medium" style={{ color: "#40577D" }} />
-            <Typography
-              variant="h6"
-              sx={{ color: "#40577D", marginLeft: "10px" }}
+      <Grid container spacing={2} alignItems="center" padding={2}>
+        <Grid item xs={7}>
+          <Grid container spacing={2} alignItems="center" paddingLeft={3}>
+            <Grid
+              item
+              xs={12}
+              sx={{ flexDirection: "column", display: "flex" }}
             >
-              Dublin, Ireland
-            </Typography>
+              <Typography variant="h6" sx={{ color: "#FFCD4C" }}>
+                {props.company}
+              </Typography>
+              <Typography variant="h4" sx={{ color: "#F8FAFC" }}>
+                {props.title}
+              </Typography>
+            </Grid>
           </Grid>
         </Grid>
-        <Box sx={{width:"400px"}}>
-          <Grid container spacing={1} paddingTop={1} paddingRight={2} paddingLeft={2} paddingBottom={3}>
-            <Grid item xs={3}>
-              <Box
-                sx={{
-                  padding: "3px",
+
+        <Grid item xs={5}>
+          <Grid container padding={1}  direction="column" spacing={1} alignItems="left">
+            <Grid
+              item
+              xs={4}
+              sx={{
+                alignItems: "center",
+                flexDirection: "row",
+                display: "flex",
+              }}
+            >
+              <Box sx={{
+                  padding: "5px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   borderRadius: "12px",
                   backgroundColor: "#0F0C07",
-                }}
-              >
-                <Typography sx={{ color: "#2684FF" }}>Full-time</Typography>
+                }}>
+                <PlaceOutlinedIcon
+                  fontSize="small"
+                  style={{ marginLeft: "5px", color: "#2684FF" }}
+                />
+                <Typography
+                  variant="body"
+                  sx={{ color: "#2684FF", marginLeft: "10px", marginRight: "5px" }}
+                >
+                  {props.location}
+                </Typography>
               </Box>
             </Grid>
-            <Grid item xs={3}>
-              <Box
-                sx={{
-                  padding: "3px",
+            {props.salary ? (<Grid
+              item
+              xs={4}
+              sx={{
+                alignItems: "center",
+                flexDirection: "row",
+                display: "flex",
+              }}
+            >
+              <Box sx={{
+                  padding: "5px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   borderRadius: "12px",
-                  backgroundColor: "#0F0C07"
-                }}
-              >
-                <Typography sx={{ color: "#2684FF" }}>Remote</Typography>
+                  backgroundColor: "#0F0C07",
+                }}>
+                <MonetizationOnOutlinedIcon
+                  fontSize="small"
+                  style={{ marginLeft: "5px", color: "#2684FF" }}
+                />
+                <Typography
+                  variant="body"
+                  sx={{ color: "#2684FF", marginLeft: "10px", marginRight: "10px"}}
+                >
+                  {props.salary}
+                </Typography>
+              </Box>
+            </Grid>) : (null)}
+            <Grid
+              item
+              xs={3}
+              sx={{
+                alignItems: "center",
+                flexDirection: "row",
+                display: "flex",
+              }}
+            >
+              <Box sx={{
+                  padding: "5px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "12px",
+                  backgroundColor: "#0F0C07",
+                }}>
+                <CalendarMonthOutlinedIcon
+                  fontSize="small"
+                  style={{ marginLeft: "5px", color: "#2684FF" }}
+                />
+                <Typography
+                  variant="body"
+                  sx={{ color: "#2684FF", marginLeft: "10px", marginRight:"10px" }}
+                >
+                  {props.posted_date}
+                </Typography>
               </Box>
             </Grid>
           </Grid>
-        </Box>
-      </Box>
-    </Grid>
+        </Grid>
+      </Grid>
+    </Button>
   );
 }
 
