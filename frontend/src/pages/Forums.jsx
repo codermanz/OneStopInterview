@@ -47,7 +47,7 @@ function Forums() {
               bgcolor: "rgba(51,102,204)",
               borderRadius: "50px",
             }}>
-               <a type="button" href="/forums/postlist">Navigate to the Forum</a>
+               <a type="button" href="/forums/posts/">Navigate to the Forum</a>
             </Button>
       </div>
     </div>

@@ -9,7 +9,9 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import AppBar from '@mui/material/AppBar';
 import TextField from '@mui/material/TextField';
+import axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import axiosInstance from "../axios";
 
 let theme = createTheme({
@@ -85,30 +87,11 @@ function RenderForm() {
   const navigate = useNavigate();
   const baseURL = "https://onestopinterview.onrender.com/api";
 
-  /*
-    const post = {
-        author: "Bea",
-        title: "This is title test",
-        body: "Test body",
-        time: "11/29/2022"
-    };
-
-  const [replies, setReplies] = useState([
-    { author: "User1",
-      body: "Reply test1",
-      time: "11/29/2022"},
-    { author: "User2",
-      body: "Reply test2",
-      time: "11/30/2022"}
-  ]);
-  */
-
   const onChangeTitle = (e) => {
     if (!e.target.value) {
       setTitle(undefined);
       return;
     }
-    console.log("title: ", title);
     setTitle(e.target.value);
   };
 
@@ -117,7 +100,6 @@ function RenderForm() {
       setCaption(undefined);
       return;
     }
-    console.log("caption: ", caption);
     setCaption(e.target.value);
   };
   
@@ -129,28 +111,6 @@ function RenderForm() {
     }
 
     const formData = { title: title, body: caption };
-
-/*
-    axios ({
-      method: "post",
-      url: baseURL + "/posts/",
-      data: formData,
-      headers: {
-          Authorization: localStorage.getItem("access_token")
-            ? "JWT " + localStorage.getItem("access_token")
-            : null,
-          "Content-Type": "application/json",
-          accept: "application/json",
-        },
-    })
-      .then(function (response) {
-        console.log(response);
-        navigate("/forums/postlist/");
-      })
-      .catch(function (response) {
-        console.error(response);
-      });
-      */
 
     axiosInstance
       .post(`/posts/`, formData)

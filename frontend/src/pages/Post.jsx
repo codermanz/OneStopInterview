@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from 'react';
+import {Route, Link, Routes, useParams, useLocation } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -12,6 +13,7 @@ import CardActions from '@mui/material/CardActions';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import TextField from '@mui/material/TextField';
+import axiosInstance from "../axios";
 
 let theme = createTheme({
   palette: {
@@ -79,13 +81,9 @@ theme = {
 };
 
 const drawerWidth = 250;
-  function stringAvatar(name) {
-    return {
-      children: `${name.split(' ')[0][0]}`,
-    };
-  }
 
-const renderPost = (post) => {
+function RenderPost(post) {
+
   return (
     <>
       <Grid item key={post} xs={12} sm={12} md={12} 
@@ -99,7 +97,7 @@ const renderPost = (post) => {
             borderRadius: "12px", }}>
             <Grid container spacing={2} alignItems="center" padding={2} >
                 <Grid item>
-                    <Avatar {...stringAvatar(post.author)} />
+                    <Avatar {...(post.author[0])} />
                 </Grid>
                 <Grid item xs sx= {{ flexDirection: "column", display: "flex", paddingInline: '10px' }}>
                     <Typography variant="subtitle1" >{post.author}</Typography>
@@ -120,7 +118,45 @@ const renderPost = (post) => {
   );
 }
 
-const renderCommentbox = () => {
+function RenderCommentbox(props, post) {
+
+  const [comment, setComment] = useState();
+
+const isUserLoggedIn = props.state.username ? true : false;
+const visibility = isUserLoggedIn ? "visible" : "hidden";
+const isUserAuthor = (post.author==props.state.username) ? "visible" : "hidden";
+
+
+  const placeholder = isUserLoggedIn ? "Comment..." : "You have to log-in first to leave a comment.";
+
+  const onChangeComment = (e) => {
+    if (!e.target.value) {
+      setComment(undefined);
+      return;
+    }
+    setComment(e.target.value);
+  };
+
+
+  const onSubmitReply = (e) => {
+    if (comment == null) {
+      alert("Comment is required.");
+      return;
+    }
+
+    const formData = { title: comment, parent_post: post.parent_post };
+    axiosInstance
+      .post(`/posts/`, formData)
+      .then((res) => {
+        console.log(res);
+//        navigate("/forums/postlist/");
+      })
+      .catch((err) => {
+        let errorBody = err.response;
+        return Promise.resolve(errorBody);
+      });
+  }
+
   return (
     <>
       <Grid item xs={12} sm={12} md={12} 
@@ -149,11 +185,13 @@ const renderCommentbox = () => {
                             <TextField
                               fullWidth
                               multiline
-                              placeholder="Comment..."
+                              disabled={!isUserLoggedIn}
+                              placeholder={placeholder}
                               rows={3}
                               InputProps={{
                                 disableUnderline: true,
                               }}
+                              onChange={e=>onChangeComment(e)}
                               variant="standard" />
                         </Grid>
                       </Grid>
@@ -163,13 +201,13 @@ const renderCommentbox = () => {
             </CardContent>
             <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', paddingRight: '4%' }}>
                 <Button
-                    type="submit" variant="contained" href="/forums/postlist/"
+                    type="submit" variant="contained" href="/forums/posts/"
                     sx={{ backgroundColor: "transparent", color: "white",
                         border: "1px solid white", borderRadius: "12px", }}>
                     Cancel
                 </Button>
                 <Button
-                    type="submit" variant="contained" onClick={onSubmitReply()}
+                    type="submit" variant="contained" onClick={onSubmitReply}
                     sx={{ ml: 2, bgcolor: "rgba(51,102,204)", borderRadius: "12px", }}>
                     Submit
                 </Button>
@@ -180,7 +218,8 @@ const renderCommentbox = () => {
   );
 }
 
-const renderReply = (post) => {
+function RenderReply(post) {
+
   return (
     <>
       <Grid item key={post} xs={12} sm={12} md={12} 
@@ -193,7 +232,7 @@ const renderReply = (post) => {
             borderRadius: "12px", }}>
             <Grid container spacing={2} alignItems="center" padding={2} >
                 <Grid item>
-                    <Avatar {...stringAvatar(post.author)} />
+                    <Avatar {...(post.author[0])} />
                 </Grid>
                 <Grid item xs sx= {{ flexDirection: "column", display: "flex" }}>
                     <Typography variant="subtitle1" >{post.author}</Typography>
@@ -211,27 +250,27 @@ const renderReply = (post) => {
   );
 }
 
-function onSubmitReply() {
 
-}
+export default function ViewPost(props) {
+    const params = useParams();
+    const location = useLocation();
 
+    const [post, setPost] = useState({
+        title: location.state.title,
+        body: location.state.body,
+        author: location.state.author,
+        time: location.state.time_stamp,
+    })
 
-export default function ViewPost() {
-    const post = {
-        author: "Bea",
-        title: "This is title test",
-        body: "Test body",
-        time: "11/29/2022"
-    };
-
-  const [replies, setReplies] = useState([
-    { author: "User1",
-      body: "Reply test1",
-      time: "11/29/2022"},
-    { author: "User2",
-      body: "Reply test2",
-      time: "11/30/2022"}
-  ]);
+    // Mocking data ATM
+    const [replies, setReplies] = useState([
+        { author: "User1",
+        body: "Reply test1",
+        time: "11/29/2022"},
+        { author: "User2",
+        body: "Reply test2",
+        time: "11/30/2022"}
+    ]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -244,18 +283,18 @@ export default function ViewPost() {
         <CssBaseline />
           <Box sx={{ flex: 1, justifyContent: "center", display: 'flex', flexDirection: 'column', marginTop: '2%'}}>
             <div style={{ marginLeft: drawerWidth }}>
-                {renderPost(post)}
+                {RenderPost(post)}
             </div>
           </Box>
           <Box sx={{ flex: 1, justifyContent: "center", display: 'flex', flexDirection: 'column', marginTop: '2%'}}>
             <div style={{ marginLeft: drawerWidth }}>
-                {renderCommentbox(post)}
+                {RenderCommentbox(props, post)}
             </div>
           </Box>
           <Box sx={{ flex: 1, justifyContent: "center", display: 'flex', flexDirection: 'column', marginTop: '2%'}}>
             <div style={{ marginLeft: drawerWidth }}>
                 {replies.map((reply) => (
-                    renderReply(reply)
+                    RenderReply(reply)
                 ))}
             </div>
           </Box>
