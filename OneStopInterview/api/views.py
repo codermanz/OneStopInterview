@@ -250,23 +250,27 @@ class JobPostingsStatic(generics.ListAPIView):
             jobs = models.JobPosting.objects.filter(job_title_category=self.request.GET.get('job_title'),
                                                     location_category=self.request.GET.get('location'))
             if not jobs:
+                logging.error("JOBSEARCHSTATIC VIEW - Invalid job title and location provided")
                 raise ValidationError(detail='Job and Location combination doesn\'t exist')
-
+            logging.info("Returned payload for job postings static")
             return jobs
         # Only job title
         if self.request.GET.get('job_title'):
             jobs = models.JobPosting.objects.filter(job_title_category=self.request.GET.get('job_title'))
             if not jobs:
+                logging.error("JOBSEARCHSTATIC VIEW - Invalid Job_Title provided")
                 raise ValidationError(detail='Job title doesn\'t exist')
-
+            logging.info("Returned payload for job postings static")
             return jobs
         # Location
         if self.request.GET.get('location'):
             jobs = models.JobPosting.objects.filter(location_category=self.request.GET.get('location'))
             if not jobs:
+                logging.error("JOBSEARCHSTATIC VIEW - Invalid location provided")
                 raise ValidationError(detail='Location combination doesn\'t exist')
-
+            logging.info("Returned payload for job postings static")
             return jobs
 
+        logging.info("Returned payload for job postings static")
         # Return all job postings
         return models.JobPosting.objects.all()

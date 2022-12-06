@@ -9,9 +9,11 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import sys
 from pathlib import Path
 from datetime import timedelta
+from django.core.management.utils import get_random_secret_key
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,15 +23,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-yo81-otn&qd5mp-bk6&w#q^gi02=zk6qdt2&qfma%(@r*l_&s4'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ORIGIN_ALLOW_ALL = True
+
 CSRF_TRUSTED_ORIGINS = [
     'https://onestopinterview.onrender.com',
     'https://willowy-cajeta-e6a338.netlify.app',
@@ -88,16 +90,35 @@ WSGI_APPLICATION = 'OneStopInterview.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'onestopinterview_xt1f',
-        'USER': 'onestopinterview',
-        'PASSWORD': 'SdspQQJLX4E3LhmjWbicgOSwzE3t2pQ7',
-        'HOST': 'dpg-cdfepepgp3juhhv14uug-a.oregon-postgres.render.com',
-        'PORT': '5432',
+if DEVELOPMENT_MODE is True:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
+    if os.getenv("DATABASE_URL", None) is None:
+        raise Exception("DATABASE_URL environment variable not defined")
+    if os.getenv("DATABASE_PORT", None) is None:
+        raise Exception("DATABASE_PORT environment variable not defined")
+    if os.getenv("DATABASE_PASSWORD", None) is None:
+        raise Exception("DATABASE_PASSWORD environment variable not defined")
+    if os.getenv("DATABASE_NAME", None) is None:
+        raise Exception("DATABASE_NAME environment variable not defined")
+    if os.getenv("DATABASE_USER", None) is None:
+        raise Exception("DATABASE_USER environment variable not defined")
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('DATABASE_NAME'),
+            'USER': os.getenv('DATABASE_USER'),
+            'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+            'HOST': os.getenv('DATABASE_URL'),
+            'PORT': os.getenv('DATABASE_PORT'),
+        }
+    }
 
 
 # Password validation
@@ -135,6 +156,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -154,6 +176,8 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = 'users.User'
 
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGINS = [
     "https://onestopinterview.onrender.com",
     "https://willowy-cajeta-e6a338.netlify.app",
