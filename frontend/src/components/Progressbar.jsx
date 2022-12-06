@@ -1,5 +1,7 @@
 import { Box, Typography } from "@mui/material";
 
+//TODO : Yellow  bar
+
 const ProgressBar = (props) => {
   const { title, bgcolor, completed } = props;
 
@@ -25,7 +27,7 @@ const ProgressBar = (props) => {
   };
 
   return (
-    <div>
+    <Box>
       <Typography variant="h4" ml={1} mb={2} color="white">
         {`${title}`}
       </Typography>
@@ -37,7 +39,7 @@ const ProgressBar = (props) => {
       <Typography variant="h6" ml={1} mt={1} color="white">
         {`${completed}% Completed`}
       </Typography>
-    </div>
+    </Box>
   );
 };
 

@@ -52,12 +52,9 @@ function JobSearchDropdowns(props) {
         `/jobPostingsStatic/?job_title=${selectedJobCategory}&location=${selectedLocationCategory}`
       )
       .then((res) => {
-        console.log("im in getJobs result");
-        console.log(res);
         setJobPostingsArray(res.data);
       })
       .catch((err) => {
-        console.log(err);
         setShowJobPostings(false);
         setJobCategory("");
         setLocationCategory("");
@@ -77,8 +74,7 @@ function JobSearchDropdowns(props) {
             backgroundColor: "#101F33",
             border: "1px solid white",
             borderRadius: "12px",
-          }}
-        >
+          }}>
           <InputLabel id="job-title-category-label" sx={{ color: "#F8FAFC" }}>
             Select a Job Title Category
           </InputLabel>
@@ -88,8 +84,7 @@ function JobSearchDropdowns(props) {
               id="demo-simple-select"
               label="Select a Job Title Category"
               value={selectedJobCategory}
-              onChange={handleJobChange}
-            >
+              onChange={handleJobChange}>
               {props.jobTitleCategories.map((title) => {
                 return (
                   <MenuItem key={title.category} value={title.category}>
@@ -109,8 +104,7 @@ function JobSearchDropdowns(props) {
             backgroundColor: "#101F33",
             border: "1px solid white",
             borderRadius: "12px",
-          }}
-        >
+          }}>
           <InputLabel id="location-category-label" sx={{ color: "#F8FAFC" }}>
             Select a Location Category
           </InputLabel>
@@ -120,8 +114,7 @@ function JobSearchDropdowns(props) {
               id="demo-simple-select"
               label="Select a Location Category"
               value={selectedLocationCategory}
-              onChange={handleLocationChange}
-            >
+              onChange={handleLocationChange}>
               {props.locationCategories.map((location) => {
                 return (
                   <MenuItem key={location.category} value={location.category}>
@@ -143,8 +136,7 @@ function JobSearchDropdowns(props) {
             onClick={handleJobLocationSearch}
             sx={{
               borderRadius: "20px",
-            }}
-          >
+            }}>
             Start Your Job Search
           </ColorButton>
         ) : (
@@ -156,8 +148,7 @@ function JobSearchDropdowns(props) {
               disabled
               sx={{
                 borderRadius: "20px",
-              }}
-            >
+              }}>
               Select a Job Title and Location
             </Button>
           </ThemeProvider>
@@ -192,8 +183,7 @@ function JobSearchDropdowns(props) {
               fontSize: "17px",
               bgcolor: "rgba(51,102,204)",
               borderRadius: "50px",
-            }}
-          >
+            }}>
             <a type="button" href="/login">
               You Have Been Logged Out. Click Here to Log In.
             </a>
