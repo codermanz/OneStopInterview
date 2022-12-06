@@ -8,7 +8,7 @@ import Loader from "./Loader";
 
 function Sidebar({ progress }) {
   const progressList = [
-    { title: "My Progress", bgcolor: "#6a1b9a", completed: progress },
+    { title: "My Progress", bgcolor: "#3849ab", completed: progress },
     /*
     { title: "Behavioral Interview Questions", bgcolor: "#00695c", completed: 30 },
     { title: "Frontend roadmap", bgcolor: "#ef6c00", completed: 53 },
@@ -18,7 +18,7 @@ function Sidebar({ progress }) {
 
   const SideButton = styled(Button)({
     color: "white",
-    backgroundColor: "#31306b",
+    backgroundColor: "#3849ab",
   });
 
   const handleClearProgress = () => {

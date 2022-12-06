@@ -107,9 +107,9 @@ function InterviewPage(props) {
           width: "100%",
         }}>
         <Box sx={{ color: "white" }}>
-          <div style={{ padding: "60px", margin: "auto", width: "80%" }}>
+          <div style={{ padding: "60px", margin: "auto", width: "100%" }}>
             <Typography variant="h2" align="center" gutterBottom>
-              Technical and Behavioral Interview Questions
+              Technical Interview Questions
             </Typography>
             <Typography
               variant="h5"
