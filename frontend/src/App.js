@@ -13,8 +13,10 @@ import {
 import Jobs from "./pages/Jobs"
 import Forums from "./pages/Forums";
 import PostList from "./pages/PostList";
+import MyPostList from "./pages/MyPostList";
 import Post from "./pages/Post";
 import AddPost from "./pages/AddPost";
+import EditPost from "./pages/EditPost";
 import { Navbar, Logout, Loader } from "./components";
 import CssBaseline from "@mui/material/CssBaseline";
 import axiosInstance from "./axios";
@@ -69,8 +71,10 @@ function App() {
                 />
                 <Route path="/forums" element={<Forums />} />
                 <Route path="/forums/posts" element={<PostList state={appState} />} />
+                <Route path="/forums/myposts" element={<MyPostList state={appState} />} />
                 <Route path="/forums/posts/:id" element={<Post state={appState} />} />
                 <Route path="/forums/addpost" element={<AddPost state={appState} />} />
+                <Route path="/forums/editpost" element={<EditPost state={appState} />} />
                 <Route path="/resume-tips" element={<ResumeTips />} />
                 <Route path="/resume-tips/checkpoints" element={<Checkpoints />} />
                 <Route path="/jobs" element={<Jobs state={appState}/>}/>

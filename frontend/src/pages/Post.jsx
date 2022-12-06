@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from 'react';
+import axios from 'axios';
 import {Route, Link, Routes, useParams, useLocation } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,6 +15,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import TextField from '@mui/material/TextField';
 import axiosInstance from "../axios";
+import { useNavigate } from "react-router-dom";
 
 let theme = createTheme({
   palette: {
@@ -80,10 +82,10 @@ theme = {
   },
 };
 
+const baseURL = "https://onestopinterview.onrender.com/api";
 const drawerWidth = 250;
 
 function RenderPost(post) {
-
   return (
     <>
       <Grid item key={post} xs={12} sm={12} md={12} 
@@ -100,7 +102,7 @@ function RenderPost(post) {
                     <Avatar {...(post.author[0])} />
                 </Grid>
                 <Grid item xs sx= {{ flexDirection: "column", display: "flex", paddingInline: '10px' }}>
-                    <Typography variant="subtitle1" >{post.author}</Typography>
+                    <Typography variant="subtitle1" >{post.author_username}</Typography>
                     <Typography variant="body2">{post.time}</Typography>
                 </Grid>
             </Grid>
@@ -119,14 +121,11 @@ function RenderPost(post) {
 }
 
 function RenderCommentbox(props, post) {
+  const navigate = useNavigate();
 
   const [comment, setComment] = useState();
-
-const isUserLoggedIn = props.state.username ? true : false;
-const visibility = isUserLoggedIn ? "visible" : "hidden";
-const isUserAuthor = (post.author==props.state.username) ? "visible" : "hidden";
-
-
+  const isUserLoggedIn = props.state.username ? true : false;
+  const isUserAuthor = (post.author==props.state.username) ? "visible" : "hidden";
   const placeholder = isUserLoggedIn ? "Comment..." : "You have to log-in first to leave a comment.";
 
   const onChangeComment = (e) => {
@@ -137,24 +136,27 @@ const isUserAuthor = (post.author==props.state.username) ? "visible" : "hidden";
     setComment(e.target.value);
   };
 
-
   const onSubmitReply = (e) => {
     if (comment == null) {
       alert("Comment is required.");
       return;
     }
 
-    const formData = { title: comment, parent_post: post.parent_post };
+    const formatDate = (dateString) => {
+      const options = { year: "numeric", month: "long", day: "numeric"}
+      return new Date(dateString).toLocaleDateString(undefined, options)
+    }
+
+    const formData = { title: "REPLY POST", body: comment, parent_post: post.id };
     axiosInstance
       .post(`/posts/`, formData)
       .then((res) => {
-        console.log(res);
-//        navigate("/forums/postlist/");
+        window.location.reload();
       })
       .catch((err) => {
         let errorBody = err.response;
         return Promise.resolve(errorBody);
-      });
+    });
   }
 
   return (
@@ -218,35 +220,64 @@ const isUserAuthor = (post.author==props.state.username) ? "visible" : "hidden";
   );
 }
 
-function RenderReply(post) {
+function RenderReply(id) {
+  const [replies, setReplies] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () =>{
+      axios ({
+        method: "get",
+        url: baseURL + "/posts/",
+      })
+        .then(function (response) {
+          response.data.forEach(post=> {
+            if (post.parent_post == id) {
+              setReplies(replies=> [...replies, post]);
+            }
+          });
+        })
+        .catch(function (response) {
+          console.error(response);
+      });
+    }
+    fetchData()
+  }, []);
+
+
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "long", day: "numeric"}
+    return new Date(dateString).toLocaleDateString(undefined, options)
+  }
 
   return (
-    <>
-      <Grid item key={post} xs={12} sm={12} md={12} 
-            sx={{position: 'static', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBlock: '10px' }} >
-        <Box sx={{ 
-            width: "80%",
-            height: "200px",
-            color: "white",
-            border: "1px solid white",
-            borderRadius: "12px", }}>
-            <Grid container spacing={2} alignItems="center" padding={2} >
-                <Grid item>
-                    <Avatar {...(post.author[0])} />
-                </Grid>
-                <Grid item xs sx= {{ flexDirection: "column", display: "flex" }}>
-                    <Typography variant="subtitle1" >{post.author}</Typography>
-                    <Typography variant="body2">{post.time}</Typography>
-                </Grid>
-            </Grid>
-            <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="body1">
-                  {post.body}
-                </Typography>
-            </CardContent>
-        </Box> 
-      </Grid>
-    </>
+    <div style={{ marginLeft: drawerWidth }}>
+      {replies.map((reply) => (
+        <Grid item key={reply.id} xs={12} sm={12} md={12} 
+              sx={{position: 'static', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBlock: '10px' }} >
+          <Box sx={{ 
+              width: "80%",
+              height: "200px",
+              color: "white",
+              border: "1px solid white",
+              borderRadius: "12px", }}>
+              <Grid container spacing={2} alignItems="center" padding={2} >
+                  <Grid item>
+                      <Avatar {...(reply.author[0])} />
+                  </Grid>
+                  <Grid item xs sx= {{ flexDirection: "column", display: "flex" }}>
+                      <Typography variant="subtitle1" >{reply.author_username}</Typography>
+                      <Typography variant="body2">{formatDate(reply.time_stamp)}</Typography>
+                  </Grid>
+              </Grid>
+              <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography variant="body1">
+                    {reply.body}
+                  </Typography>
+              </CardContent>
+          </Box> 
+        </Grid>
+      ))}
+    </div>
   );
 }
 
@@ -256,21 +287,14 @@ export default function ViewPost(props) {
     const location = useLocation();
 
     const [post, setPost] = useState({
+        id: location.state.id,
         title: location.state.title,
         body: location.state.body,
+        parent_post: location.state.parent_post,
         author: location.state.author,
         time: location.state.time_stamp,
+        author_username: location.state.author_username,
     })
-
-    // Mocking data ATM
-    const [replies, setReplies] = useState([
-        { author: "User1",
-        body: "Reply test1",
-        time: "11/29/2022"},
-        { author: "User2",
-        body: "Reply test2",
-        time: "11/30/2022"}
-    ]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -292,11 +316,7 @@ export default function ViewPost(props) {
             </div>
           </Box>
           <Box sx={{ flex: 1, justifyContent: "center", display: 'flex', flexDirection: 'column', marginTop: '2%'}}>
-            <div style={{ marginLeft: drawerWidth }}>
-                {replies.map((reply) => (
-                    RenderReply(reply)
-                ))}
-            </div>
+              {RenderReply(post.id)}
           </Box>
       </Box>
     </ThemeProvider>

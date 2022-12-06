@@ -11,7 +11,7 @@ import AppBar from '@mui/material/AppBar';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import {Route, Routes, useParams, useLocation } from 'react-router-dom';
 import axiosInstance from "../axios";
 
 let theme = createTheme({
@@ -79,52 +79,55 @@ theme = {
   },
 };
 
+const baseURL = "https://onestopinterview.onrender.com/api";
 
-function RenderForm() {
-  const [title, setTitle] = useState();
-  const [caption, setCaption] = useState();
-
+function RenderForm(post) {
   const navigate = useNavigate();
-  const baseURL = "https://onestopinterview.onrender.com/api";
+
+  const [title, setTitle] = useState(post.title);
+  const [caption, setCaption] = useState(post.body);
+  const [updatedPost, setUpdatedPost] = useState();
 
   const onChangeTitle = (e) => {
-    if (!e.target.value) {
-      setTitle(undefined);
-      return;
-    }
     setTitle(e.target.value);
   };
 
   const onChangeCaption = (e) => {
-    if (!e.target.value) {
-      setCaption(undefined);
-      return;
-    }
     setCaption(e.target.value);
   };
   
   const onSubmit = (e) => {
-
     if (title == null || caption == null) {
       alert("Title and caption are required.");
       return;
     }
 
-    const formData = { title: title, body: caption };
+    const formatDate = (dateString) => {
+      const options = { year: "numeric", month: "long", day: "numeric"}
+      return new Date(dateString).toLocaleDateString(undefined, options)
+    }
+
+  const formData = { title: title, body: caption };
 
     axiosInstance
-      .post(`/posts/`, formData)
+      .put(`/postsModify/` + post.id, formData)
       .then((res) => {
-        console.log(res);
-        navigate("/forums/postlist/");
+        setUpdatedPost(res.data);
+        navigate("/forums/posts/" + updatedPost.id, 
+          {state:{id: updatedPost.id,
+                  title: updatedPost.title,
+                  body: updatedPost.body,
+                  parent_post: updatedPost.parent_post,
+                  author: updatedPost.author,
+                  time_stamp: formatDate( updatedPost.time_stamp),
+                  author_username: updatedPost.author_username} }
+        );
       })
       .catch((err) => {
         let errorBody = err.response;
         return Promise.resolve(errorBody);
       });
-
   }
-
 
   return (
     <>
@@ -153,7 +156,7 @@ function RenderForm() {
                           <TextField
                             fullWidth
                             multiline
-                            placeholder="Title"
+                            defaultValue={title}
                             rows={1}
                             InputProps={{
                               disableUnderline: true,
@@ -180,7 +183,7 @@ function RenderForm() {
                         <TextField
                           fullWidth
                           multiline
-                          placeholder="Caption"
+                          defaultValue={caption}
                           rows={10}
                           InputProps={{
                             disableUnderline: true,
@@ -214,13 +217,21 @@ function RenderForm() {
 
 const drawerWidth = 250;
 
-export default function AddPost(props) {
+export default function EditPost(props) {
 
-  /*
-  const isUserLoggedIn = props.state.username ? true : false;
-  console.log("username: ", props.state.username);
-  */
-  
+  const params = useParams();
+  const location = useLocation();
+  console.log("props:", props);
+
+  const [post, setPost] = useState({
+      id: location.state.id,
+      title: location.state.title,
+      body: location.state.body,
+      parent_post: location.state.parent_post,
+      author: location.state.author,
+      time: location.state.time_stamp,
+      author_username: location.state.author_username,
+  })
 
   return (
     <ThemeProvider theme={theme}>
@@ -233,7 +244,7 @@ export default function AddPost(props) {
         <CssBaseline />
           <Box sx={{ flex: 1, justifyContent: "center", display: 'flex', flexDirection: 'column', marginTop: '2%'}}>
             <div style={{ marginLeft: drawerWidth }}>
-                {RenderForm()}
+                {RenderForm(post)}
             </div>
           </Box>
       </Box>

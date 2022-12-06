@@ -10,7 +10,6 @@ import ListItemText from '@mui/material/ListItemText';
 import CreateIcon from '@mui/icons-material/Create';
 import ListIcon from '@mui/icons-material/List';
 import HelpIcon from '@mui/icons-material/Help';
-import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 
 const categories = [
   {
@@ -23,8 +22,7 @@ const categories = [
   {
     id: 'PERSONAL NAVIGATOR',
     menus: [
-      { cid: '3', text: 'My Questions', icon: <HelpIcon /> },
-      { cid: '4', text: 'My Answers', icon: <QuestionAnswerIcon /> },
+      { cid: '3', text: 'My Questions', icon: <HelpIcon />, moveTo: '/forums/myposts/'},
     ],
   },
 ];

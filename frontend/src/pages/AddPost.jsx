@@ -125,157 +125,96 @@ function RenderForm() {
     }
 
     const formData = { title: title, body: caption };
-
-    /*
-    axios ({
-      method: "post",
-      url: baseURL + "/posts/",
-      data: formData,
-      headers: {
-          Authorization: localStorage.getItem("access_token")
-            ? "JWT " + localStorage.getItem("access_token")
-            : null,
-          "Content-Type": "application/json",
-          accept: "application/json",
-        },
-    })
-      .then(function (response) {
-        console.log(response);
-        navigate("/forums/postlist/");
-      })
-      .catch(function (response) {
-        console.error(response);
-      });
-      */
-
     axiosInstance
       .post(`/posts/`, formData)
       .then((res) => {
-        navigate("/forums/postlist/");
+        navigate("/forums/posts/");
       })
       .catch((err) => {
         let errorBody = err.response;
         return Promise.resolve(errorBody);
       });
   };
-
   return (
     <>
-      <Grid
-        item
-        xs={12}
-        sm={12}
-        md={12}
-        sx={{
-          position: "static",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}>
-        <Box
-          sx={{
-            width: "80%",
-            height: "450px",
-            color: "white",
-            border: "1px solid white",
-            borderRadius: "12px",
-          }}>
-          <CardContent sx={{ flexGrow: 1 }}>
-            <div
-              style={{ padding: "15px", width: "100%" }}
-              align-items="center"
-              flex-direction="column"
-              display="flex"
-              justify-content="center">
-              <AppBar
-                position="static"
-                color="default"
-                elevation={0}
-                sx={{ borderBottom: "1px solid " }}>
-                <Grid
-                  container
-                  spacing={2}
-                  alignItems="center"
-                  display="flex"
-                  sx={{ padding: "10px" }}>
-                  <Grid item md sx={{ padding: "5px" }}>
-                    <TextField
-                      fullWidth
-                      multiline
-                      placeholder="Title"
-                      rows={1}
-                      InputProps={{
-                        disableUnderline: true,
-                      }}
-                      onChange={(e) => onChangeTitle(e)}
-                      variant="standard"
-                    />
-                  </Grid>
-                </Grid>
-              </AppBar>
-            </div>
-            <div
-              style={{ padding: "15px", width: "100%" }}
-              align-items="center"
-              flex-direction="column"
-              display="flex"
-              justify-content="center">
-              <AppBar
-                position="static"
-                color="default"
-                elevation={0}
-                sx={{ borderBottom: "1px solid " }}>
-                <Grid
-                  container
-                  spacing={2}
-                  alignItems="center"
-                  display="flex"
-                  sx={{ padding: "10px" }}>
-                  <Grid item md>
-                    <TextField
-                      fullWidth
-                      multiline
-                      placeholder="Caption"
-                      rows={10}
-                      InputProps={{
-                        disableUnderline: true,
-                      }}
-                      onChange={(e) => onChangeCaption(e)}
-                      variant="standard"
-                    />
-                  </Grid>
-                </Grid>
-              </AppBar>
-            </div>
-          </CardContent>
-          <CardActions
-            sx={{
-              display: "flex",
-              marginTop: "80px",
-              justifyContent: "flex-end",
-              paddingRight: "4%",
-            }}>
-            <Button
-              type="submit"
-              variant="contained"
-              href="/forums/postlist/"
-              sx={{
-                backgroundColor: "transparent",
-                color: "white",
-                border: "1px solid white",
-                borderRadius: "12px",
-              }}>
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              onClick={onSubmit}
-              sx={{ ml: 2, bgcolor: "rgba(51,102,204)", borderRadius: "12px" }}>
-              Submit
-            </Button>
-          </CardActions>
-        </Box>
+      <Grid item xs={12} sm={12} md={12} 
+            sx={{position: 'static', display: 'flex', flexDirection: 'column', alignItems: 'center' }} >
+        <Box sx={{ 
+          width: "80%",
+          height: "450px",
+          color: "white",
+          border: "1px solid white",
+          borderRadius: "12px", }}>
+            <CardContent sx={{ flexGrow: 1 }}>
+              <div
+                style={{ padding: "15px", width: "100%" }}
+                align-items="center"
+                flex-direction="column"
+                display="flex"
+                justify-content="center">
+                <AppBar
+                  position="static"
+                  color="default"
+                  elevation={0}
+                  sx={{ borderBottom: '1px solid ' }} >
+                    <Grid container spacing={2} alignItems="center" display='flex' sx={{ padding: '10px' }}>
+                      <Grid item md sx={{ padding: '5px' }}>
+                          <TextField
+                            fullWidth
+                            multiline
+                            placeholder="Title"
+                            rows={1}
+                            InputProps={{
+                              disableUnderline: true,
+                            }}
+                            onChange={e=>onChangeTitle(e)}
+                            variant="standard" />
+                      </Grid>
+                    </Grid>
+                </AppBar>
+              </div>
+              <div
+                style={{ padding: "15px", width: "100%" }}
+                align-items="center"
+                flex-direction="column"
+                display="flex"
+                justify-content="center">
+                <AppBar
+                  position="static"
+                  color="default"
+                  elevation={0}
+                  sx={{ borderBottom: '1px solid ' }} >
+                    <Grid container spacing={2} alignItems="center" display='flex' sx={{ padding: '10px' }}>
+                      <Grid item md>
+                        <TextField
+                          fullWidth
+                          multiline
+                          placeholder="Caption"
+                          rows={10}
+                          InputProps={{
+                            disableUnderline: true,
+                          }}
+                          onChange={e=>onChangeCaption(e)}
+                          variant="standard" />
+                      </Grid>
+                    </Grid>
+                </AppBar>
+              </div>
+            </CardContent>
+            <CardActions sx={{ display: 'flex', marginTop: '80px', justifyContent: 'flex-end', paddingRight: '4%' }}>
+                <Button
+                    type="submit" variant="contained" href="/forums/posts/"
+                    sx={{ backgroundColor: "transparent", color: "white",
+                        border: "1px solid white", borderRadius: "12px", }}>
+                    Cancel
+                </Button>
+                <Button
+                    type="submit" variant="contained" onClick={onSubmit}
+                    sx={{ ml: 2, bgcolor: "rgba(51,102,204)", borderRadius: "12px", }}>
+                    Submit
+                </Button>
+            </CardActions>
+        </Box> 
       </Grid>
     </>
   );
@@ -284,10 +223,6 @@ function RenderForm() {
 const drawerWidth = 250;
 
 export default function AddPost(props) {
-  /*
-  const isUserLoggedIn = props.state.username ? true : false;
-  console.log("username: ", props.state.username);
-  */
 
   return (
     <ThemeProvider theme={theme}>
@@ -305,7 +240,9 @@ export default function AddPost(props) {
             flexDirection: "column",
             marginTop: "2%",
           }}>
-          <div style={{ marginLeft: drawerWidth }}>{RenderForm()}</div>
+          <div style={{ marginLeft: drawerWidth }}>
+            {RenderForm()}
+          </div>
         </Box>
       </Box>
     </ThemeProvider>
