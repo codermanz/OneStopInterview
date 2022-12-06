@@ -197,7 +197,7 @@ function RenderForm(post) {
             </CardContent>
             <CardActions sx={{ display: 'flex', marginTop: '80px', justifyContent: 'flex-end', paddingRight: '4%' }}>
                 <Button
-                    type="submit" variant="contained" href="/forums/postlist/"
+                    type="submit" variant="contained" href="/forums/posts/"
                     sx={{ backgroundColor: "transparent", color: "white",
                         border: "1px solid white", borderRadius: "12px", }}>
                     Cancel
