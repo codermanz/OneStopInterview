@@ -39,22 +39,27 @@ function Sidebar({ progress }) {
         sx={{
           width: "25%",
           minHeight: "calc(100vh - 74px)",
-          borderColor: "white",
-          borderWidth: "thick",
+          backgroundColor: "#081727",
           position: "sticky",
           top: "74px",
         }}>
-        {progressList.map((item, idx) => (
-          <ProgressBar
-            key={idx}
-            title={item.title}
-            bgcolor={item.bgcolor}
-            completed={item.completed}
-          />
-        ))}
-        <SideButton variant="contained" onClick={handleClearProgress}>
-          Clear Progress
-        </SideButton>
+        <Box
+          sx={{
+            backgroundColor: "#101F33",
+            paddingY: theme.spacing(3),
+          }}>
+          {progressList.map((item, idx) => (
+            <ProgressBar
+              key={idx}
+              title={item.title}
+              bgcolor={item.bgcolor}
+              completed={item.completed}
+            />
+          ))}
+          <SideButton variant="contained" onClick={handleClearProgress}>
+            Clear Progress
+          </SideButton>
+        </Box>
       </Box>
     </ThemeProvider>
   );

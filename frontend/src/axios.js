@@ -22,11 +22,11 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
 
     if (typeof error.response === "undefined") {
-      // alert(
-      //   "A server/network error occurred. " +
-      //     "Looks like CORS might be the problem. " +
-      //     "Sorry about this - we will get it fixed shortly."
-      // );
+      alert(
+        "A server/network error occurred. " +
+          "Looks like CORS might be the problem. " +
+          "Sorry about this - we will get it fixed shortly."
+      );
       return Promise.reject(error);
     }
 
@@ -50,7 +50,6 @@ axiosInstance.interceptors.response.use(
 
         // exp date in token is expressed in seconds, while now() returns milliseconds:
         const now = Math.ceil(Date.now() / 1000);
-        console.log(tokenParts.exp);
 
         if (tokenParts.exp > now) {
           return axiosInstance

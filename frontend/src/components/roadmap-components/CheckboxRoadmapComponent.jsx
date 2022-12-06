@@ -8,7 +8,7 @@ function CheckboxRoadmapComponent(props) {
   const [labelText, setLabelText] = useState(props.labelText);
   const [frontendID, setFrontendID] = useState(props.frontend_id);
   const [backendID, setBackendID] = useState(props.backend_id);
-  
+
   useEffect(() => {
     setChecked(props.isChecked);
   }, [props.isChecked]);
@@ -49,6 +49,7 @@ function CheckboxRoadmapComponent(props) {
           .then(() => {
             setLabelText("Marked as completed");
             setIsDisabled(true);
+            window.location.reload(false);
           })
           .catch((err) => {
             let errorBody = err.response;
@@ -56,7 +57,7 @@ function CheckboxRoadmapComponent(props) {
           })
           .then(() => {
             setIsDisabled(true);
-          })
+          });
       }
     }
   };

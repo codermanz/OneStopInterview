@@ -124,7 +124,8 @@ function InterviewPage(props) {
               <div style={{ margin: "auto", padding: "20px", width: "100%" }}>
                 <Accordion
                   sx={{ padding: "10px" }}
-                  expanded={expanded === "frontend-panel"}
+                  defaultExpanded={true}
+                  expanded={true}
                   onChange={handleChange("frontend-panel")}>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}

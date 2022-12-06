@@ -8,7 +8,7 @@ import {
   createTheme,
   Box,
 } from "@mui/material";
-import { Loader } from "../components/index";
+import { Sidebar, Loader } from "../components/index";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FrontendRoadmapComponent from "../components/roadmap-components/FrontendRoadmapComponent";
 import BackendRoadmapComponent from "../components/roadmap-components/BackendRoadmapComponent";
@@ -45,10 +45,33 @@ function Roadmap(props) {
   // Handle if loading bar should be shown
   const [loading, setLoading] = useState(true);
 
+  const [progressPercentage, setProgressPercentage] = useState(null);
+
   // Handle change of accordion expansion
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+
+  const getUserProgress = async () => {
+    axiosInstance
+      .get(`/user/userInfo/`)
+      .then((res) => {
+        const result = res.data;
+        setProgressPercentage(result.progress_percentage);
+      })
+      .catch((err) => {
+        let errorBody = err.response;
+        return Promise.resolve(errorBody);
+      });
+  };
+
+  useEffect(() => {
+    if (props.state.progress != null) {
+      if (progressPercentage == null) {
+        setProgressPercentage(props.state.progress);
+      }
+    }
+  }, [props.state, progressPercentage]);
 
   const getIsFrontendBackendChecked = async () => {
     // First, retrieve the roadmap questions.
@@ -153,6 +176,9 @@ function Roadmap(props) {
         alignItems: "flex-start",
         justifyContent: "flex-start",
       }}>
+      {props.state.progress != null && progressPercentage != null ? (
+        <Sidebar progress={progressPercentage} />
+      ) : null}
       <Box
         sx={{
           minHeight: "100vh",
@@ -160,8 +186,7 @@ function Roadmap(props) {
           width: "100%",
           color: "white",
           backgroundColor: "#151517",
-        }}
-      >
+        }}>
         <div style={{ padding: "60px", margin: "auto", width: "80%" }}>
           <Typography variant="h2" align="center" gutterBottom>
             Frontend and Backend Roadmap
