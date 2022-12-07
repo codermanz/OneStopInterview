@@ -82,7 +82,7 @@ theme = {
   },
 };
 
-const baseURL = "https://onestopinterview.onrender.com/api";
+const baseURL = "http://127.0.0.1:8000/api";
 const drawerWidth = 250;
 
 function RenderPost(post) {
