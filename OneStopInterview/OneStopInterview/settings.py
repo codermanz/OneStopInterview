@@ -33,8 +33,8 @@ ALLOWED_HOSTS = ['*']
 
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://onestopinterview.onrender.com',
-    'https://willowy-cajeta-e6a338.netlify.app',
+#    'https://onestopinterview.onrender.com',
+#    'https://willowy-cajeta-e6a338.netlify.app',
     'http://localhost:3000',
     'http://127.0.0.1:3000'
 ]
@@ -179,8 +179,8 @@ AUTH_USER_MODEL = 'users.User'
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGINS = [
-    "https://onestopinterview.onrender.com",
-    "https://willowy-cajeta-e6a338.netlify.app",
+#    "https://onestopinterview.onrender.com",
+#    "https://willowy-cajeta-e6a338.netlify.app",
     "http://127.0.0.1:3000",
     "http://localhost:3000"
 ]
