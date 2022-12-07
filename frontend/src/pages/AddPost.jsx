@@ -82,8 +82,7 @@ function RenderForm() {
   const [caption, setCaption] = useState();
 
   const navigate = useNavigate();
-  const baseURL = "http://127.0.0.1:8000/api";
-
+  const baseURL = "https://api-onestopinterview.me/api";
   /*
     const post = {
         author: "Bea",

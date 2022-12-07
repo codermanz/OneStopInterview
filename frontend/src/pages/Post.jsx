@@ -82,7 +82,8 @@ theme = {
   },
 };
 
-const baseURL = "http://127.0.0.1:8000/api";
+const baseURL = "https://api-onestopinterview.me/api";
+
 const drawerWidth = 250;
 
 function RenderPost(post) {

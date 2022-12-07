@@ -1,4 +1,4 @@
-env
+.env
 *.pyc
 db.sqlite3
 OneStopInterview/api/migrations/*
@@ -12,5 +12,7 @@ scrapedJobDataFromIndeed
 __pycache__
 OneStopInterview/api/__pycache__
 OneStopInterview/OneStopInterview/__pycache__
-
-
+OneStopInterview/OneStopInterview/staticfiles
+OneStopInterview/OneStopInterview/staticfiles/*
+frontend/build
+frontend/build/*

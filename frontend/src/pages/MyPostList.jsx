@@ -79,7 +79,7 @@ theme = {
   },
 };
 
-const baseURL = "http://127.0.0.1:8000/api";
+const baseURL = "https://api-onestopinterview.me/api";
 
 function RenderPost(post, props, navigate) {
   const isUserAuthor = (post.author_username==props.state.username) ? "visible" : "none";
