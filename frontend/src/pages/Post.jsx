@@ -228,7 +228,7 @@ function RenderReply(id) {
     const fetchData = async () =>{
       axios ({
         method: "get",
-        url: baseURL + "/posts/",
+        url: baseURL + "posts/",
       })
         .then(function (response) {
           response.data.forEach(post=> {

@@ -32,8 +32,10 @@ DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
-#    'https://onestopinterview.onrender.com',
-#    'https://willowy-cajeta-e6a338.netlify.app',
+    "https://onestopinterview.me",
+    "https://onestopinterview.me",
+    "https://www.onestopinterview.me/",
+    "https://www.onestopinterview.me",
     'http://localhost:3000',
     'http://127.0.0.1:3000',
 ]
@@ -169,8 +171,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    # 'PAGE_SIZE': 20
 }
 
 AUTH_USER_MODEL = 'users.User'
@@ -178,16 +178,18 @@ AUTH_USER_MODEL = 'users.User'
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGINS = [
-#    "https://onestopinterview.onrender.com",
-#    "https://willowy-cajeta-e6a338.netlify.app",
+    "https://onestopinterview.me",
+    "https://onestopinterview.me",
+    "https://www.onestopinterview.me/",
+    "https://www.onestopinterview.me",
     "http://127.0.0.1:3000",
     "http://localhost:3000"
 ]
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': False,
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
+    'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
 
@@ -199,11 +201,12 @@ SIMPLE_JWT = {
     'JWK_URL': None,
     'LEEWAY': 0,
 
-    'AUTH_HEADER_TYPES': ('Bearer', 'JWT'),
+    'AUTH_HEADER_TYPES': ('Bearer', 'JWT',),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
     'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
 
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',

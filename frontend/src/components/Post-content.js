@@ -93,7 +93,7 @@ export default function Content() {
 
   axios({
     method: "get",
-    url: baseURL + "/posts/",
+    url: baseURL + "posts/",
   })
     .then(function (response) {
       response.data.results.forEach((post) => {
@@ -106,7 +106,7 @@ export default function Content() {
 
   axios({
     method: "get",
-    url: baseURL + "/posts/",
+    url: baseURL + "posts/",
   })
     .then(function (response) {})
     .catch(function (response) {

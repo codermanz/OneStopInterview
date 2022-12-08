@@ -123,7 +123,7 @@ function RenderPost(post, props, navigate) {
           const fetchData = async () =>{
             axios ({
               method: "get",
-              url: baseURL + "/posts/", })
+              url: baseURL + "posts/", })
             .then(function (response) {
               response.data.forEach(res=> {
                 if (res.parent_post == post.id) {
@@ -203,7 +203,7 @@ export default function PostList(props) {
     const fetchData = async () =>{
       axios ({
         method: "get",
-        url: baseURL + "/posts/",
+        url: baseURL + "posts/",
       })
         .then(function (response) {
           response.data.forEach(post=> {
