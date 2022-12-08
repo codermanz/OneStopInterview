@@ -83,7 +83,6 @@ theme = {
 };
 
 const baseURL = "https://onestopinterview.onrender.com/api";
-const drawerWidth = 250;
 
 function RenderPost(post) {
   return (
@@ -125,7 +124,6 @@ function RenderCommentbox(props, post) {
 
   const [comment, setComment] = useState();
   const isUserLoggedIn = props.state.username ? true : false;
-  const isUserAuthor = (post.author==props.state.username) ? "visible" : "hidden";
   const placeholder = isUserLoggedIn ? "Comment..." : "You have to log-in first to leave a comment.";
 
   const onChangeComment = (e) => {
@@ -250,7 +248,7 @@ function RenderReply(id) {
   }
 
   return (
-    <div style={{ marginLeft: drawerWidth }}>
+    <div >
       {replies.map((reply) => (
         <Grid item key={reply.id} xs={12} sm={12} md={12} 
               sx={{position: 'static', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBlock: '10px' }} >
@@ -286,6 +284,9 @@ export default function ViewPost(props) {
     const params = useParams();
     const location = useLocation();
 
+    const isUserLoggedIn = props.state.username ? true : "none";
+    const drawerWidth = isUserLoggedIn=="none" ? 150 : 250;
+
     const [post, setPost] = useState({
         id: location.state.id,
         title: location.state.title,
@@ -298,10 +299,11 @@ export default function ViewPost(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Navigator
-        PaperProps={{ style: { width: drawerWidth, top: '75px' } }}
-        sx={{ display: { sm: 'block',  } }}
-      />
+      <div style={{ display: isUserLoggedIn }} >
+        <Navigator
+          PaperProps={{ style: { width: drawerWidth, top: '75px' } }}
+          sx={{ display: { sm: 'block',  } }} />
+      </div>
       <Box 
         sx={{ flexFlow: 'column', alignItems: 'flex', minHeight: '100vh' }}>
         <CssBaseline />
@@ -316,7 +318,9 @@ export default function ViewPost(props) {
             </div>
           </Box>
           <Box sx={{ flex: 1, justifyContent: "center", display: 'flex', flexDirection: 'column', marginTop: '2%'}}>
+            <div style={{ marginLeft: drawerWidth }}>
               {RenderReply(post.id)}
+            </div>
           </Box>
       </Box>
     </ThemeProvider>
