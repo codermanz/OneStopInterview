@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "https://api-onestopinterview.me/api";
+const baseURL = "https://api-onestopinterview.me/api/";
 
 const axiosInstance = axios.create({
   baseURL: baseURL,

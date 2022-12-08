@@ -82,7 +82,7 @@ theme = {
   },
 };
 
-const baseURL = "https://api-onestopinterview.me/api";
+const baseURL = "https://api-onestopinterview.me/api/";
 
 const drawerWidth = 250;
 

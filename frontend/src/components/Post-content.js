@@ -9,7 +9,7 @@ import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import axios from "axios";
 
-const baseURL = "https://api-onestopinterview.me/api";
+const baseURL = "https://api-onestopinterview.me/api/";
 
 
 function stringAvatar(name) {

@@ -79,7 +79,7 @@ theme = {
   },
 };
 
-const baseURL = "https://api-onestopinterview.me/api";
+const baseURL = "https://api-onestopinterview.me/api/";
 
 function RenderForm(post) {
   const navigate = useNavigate();
