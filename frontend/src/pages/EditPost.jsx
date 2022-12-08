@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
@@ -9,9 +9,8 @@ import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import AppBar from "@mui/material/AppBar";
 import TextField from "@mui/material/TextField";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import { Route, Routes, useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import axiosInstance from "../axios";
 
 let theme = createTheme({
@@ -80,6 +79,7 @@ theme = {
 };
 
 const baseURL = "https://onestopinterview.onrender.com/api";
+const drawerWidth = 250;
 
 function RenderForm(post) {
   const navigate = useNavigate();
@@ -97,6 +97,7 @@ function RenderForm(post) {
   };
 
   const onSubmit = (e) => {
+
     if (title == null || caption == null) {
       alert("Title and caption are required.");
       return;
@@ -253,8 +254,6 @@ function RenderForm(post) {
   );
 }
 
-const drawerWidth = 250;
-
 export default function EditPost(props) {
   const params = useParams();
   const location = useLocation();
@@ -285,7 +284,9 @@ export default function EditPost(props) {
             flexDirection: "column",
             marginTop: "2%",
           }}>
-          <div style={{ marginLeft: drawerWidth }}>{RenderForm(post)}</div>
+          <div style={{ marginLeft: drawerWidth }}>
+            {RenderForm(post)}
+          </div>
         </Box>
       </Box>
     </ThemeProvider>
