@@ -100,7 +100,7 @@ function InterviewPage(props) {
         justifyContent: "flex-start",
       }}>
       {props.state.progress != null && progressPercentage != null ? (
-        <Sidebar progress={progressPercentage} getProgress={getUserProgress}/>
+        <Sidebar progress={progressPercentage}/>
       ) : null}
       <Box
         sx={{
