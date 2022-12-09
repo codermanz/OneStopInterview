@@ -77,29 +77,14 @@ theme = {
   },
 };
 
+const baseURL = "https://api-onestopinterview.me/api/";
+const drawerWidth = 250;
+
 function RenderForm() {
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState();
   const [caption, setCaption] = useState();
-
-  const navigate = useNavigate();
-  const baseURL = "https://api-onestopinterview.me/api/";
-  /*
-    const post = {
-        author: "Bea",
-        title: "This is title test",
-        body: "Test body",
-        time: "11/29/2022"
-    };
-
-  const [replies, setReplies] = useState([
-    { author: "User1",
-      body: "Reply test1",
-      time: "11/29/2022"},
-    { author: "User2",
-      body: "Reply test2",
-      time: "11/30/2022"}
-  ]);
-  */
 
   const onChangeTitle = (e) => {
     if (!e.target.value) {
@@ -218,8 +203,6 @@ function RenderForm() {
     </>
   );
 }
-
-const drawerWidth = 250;
 
 export default function AddPost(props) {
 

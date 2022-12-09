@@ -193,6 +193,7 @@ function RenderPost(post, props, navigate) {
 
 export default function PostList(props) {
   const navigate = useNavigate();
+
   const [posts, setPosts] = useState([]);
 
   const isUserLoggedIn = props.state.username ? true : "none";
