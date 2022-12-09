@@ -83,6 +83,10 @@ function InterviewPage(props) {
     getQuestions();
   }, []);
 
+  useEffect(() => {
+    getUserProgress();
+  }, []);
+
   if (loading) {
     return <Loader />;
   }
@@ -96,7 +100,7 @@ function InterviewPage(props) {
         justifyContent: "flex-start",
       }}>
       {props.state.progress != null && progressPercentage != null ? (
-        <Sidebar progress={progressPercentage} />
+        <Sidebar progress={progressPercentage} getProgress={getUserProgress}/>
       ) : null}
       <Box
         sx={{

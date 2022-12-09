@@ -66,6 +66,10 @@ function Roadmap(props) {
   };
 
   useEffect(() => {
+    getUserProgress();
+  }, []);
+
+  useEffect(() => {
     if (props.state.progress != null) {
       if (progressPercentage == null) {
         setProgressPercentage(props.state.progress);
